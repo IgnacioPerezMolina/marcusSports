@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  app-api:
+    container_name: app-api
+    build:
+      context: ./docker/backend
+      args:
+        UID: $U_ID
+    volumes:
+      - ./backend:/var/www/html
+    # Configuración de XDEBUG y otras variables de entorno
+    environment:
+      XDEBUG_CLIENT_HOST: 172.17.0.1
+      XDEBUG_CLIENT_PORT: 9003
+      PHP_IDE_CONFIG: serverName=symfony-server
+    ports:
+      - "1000:80"
+    networks:
+      - app-network
+    depends_on:
+      - app-mysql
+
+  app-mysql:
+    container_name: app-mysql
+    image: mysql:8.2.0
+    ports:
+      - "3336:3306"
+    environment:
+      MYSQL_DATABASE: app
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - app-mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+    command: [ "mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci" ]
+
+  app_front:
+    container_name: app_front
+    build:
+      context: ./docker/app-front
+    environment:
+      - TZ=Europe/Madrid
+    volumes:
+      - ./frontend/:/usr/src
+    ports:
+      - "80:5173"
+    depends_on:
+      - app-api
+    command: sh -c "yarn install && yarn dev --host"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: app-network
+
+volumes:
+  app-mysql-data:
