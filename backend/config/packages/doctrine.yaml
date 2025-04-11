@@ -1,0 +1,40 @@
+doctrine:
+  dbal:
+    default_connection: 'default'
+    connections:
+      default:
+        url: '%env(resolve:DATABASE_URL)%'
+  orm:
+    default_entity_manager: default
+    auto_generate_proxy_classes: true
+    entity_managers:
+      default:
+        connection: default
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            user_domain:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/config/orm/mapping/User'
+                prefix: 'MarcusSports\Users\Domain'
+                alias: user_domain
+#      other-entity-manager:
+#        connection: other-entity-manager
+#        #naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+#        mappings:
+#          other-entity-manager_user_domain:
+#            is_bundle: false
+#            type: xml
+#            dir: '%kernel.project_dir%/config/orm/mapping_other_entity_manager/User'
+#            prefix: 'MarcusSports\OtherFolder\User\Domain'
+#            alias: other_entity_manager_user_domain
+
+when@test:
+  doctrine:
+    dbal:
+      connections:
+        default:
+          url: '%env(resolve:DATABASE_URL_TEST)%'
+      # "TEST_TOKEN" is typically set by ParaTest
+#      dbname_suffix: 'Test%env(default::TEST_TOKEN)%'

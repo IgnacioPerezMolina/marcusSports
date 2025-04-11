@@ -10,15 +10,31 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $entityManager: "@doctrine.orm.default_entity_manager"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    App\:
+    MarcusSports\:
         resource: '../src/'
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+            - '../src/**/Domain/'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    MarcusSports\Shared\Infrastructure\Command\DbInitCommand:
+        tags: [ 'console.command' ]
+
+    MarcusSports\Shared\Infrastructure\Command\DbTestCleanCommand:
+        tags: [ 'console.command' ]
+        arguments:
+            $environment: '%kernel.environment%'
+
+    MarcusSports\Users\Infrastructure\Controller\:
+        resource: '../src/Users/Infrastructure/Controller'
+        tags:
+            - 'controller.service_arguments'
+
+#    TeamEQ\Laravel\User\Infrastructure\:
+#        resource: '../src/Laravel/User/Infrastructure/'
+#        tags:
+#            - 'controller.service_arguments'
+#            - { name: 'monolog.logger', channel: 'domain_events' }

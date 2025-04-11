@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace MarcusSports\Tests\Users\Domain\Mother;
+
+use DateTimeImmutable;
+use MarcusSports\Tests\Shared\Domain\DateTimeMother;
+use MarcusSports\Users\Domain\UserDeletedAt;
+
+final class UserDeletedAtMother
+{
+    public static function create(DateTimeImmutable $value): UserDeletedAt
+    {
+        return new UserDeletedAt($value);
+    }
+    public static function random(): UserDeletedAt
+    {
+        return self::create(DateTimeMother::random());
+    }
+
+    public static function now(): UserDeletedAt
+    {
+        return self::create(DateTimeMother::now());
+    }
+}

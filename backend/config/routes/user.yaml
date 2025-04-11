@@ -1,0 +1,4 @@
+user_post:
+  path: /user
+  controller: MarcusSports\Users\Infrastructure\Controller\UserPostController
+  methods: [POST]

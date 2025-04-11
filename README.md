@@ -54,3 +54,31 @@ This repository contains the basic configuration to run Symfony applications wit
     ###< symfony/framework-bundle ###
     ```
 6. Once you have installed you Symfony application go to http://localhost:1000
+
+
+
+
+To speak About:
+- health check.
+- Layers (Domain, application and Infrastructure)
+- Value Object (UUID infrastructure inside Domain and explication)
+- TDD
+- Repository Patterns
+
+
+
+- Testing
+- Mothers
+- About, save unfinished order into a database or what, I discovered a use case to uso that information to send a help email to support the order and finish it. I am not sure if later I am going to delete data from database or maybe set an state (Depends on product decisions and metrics that we want to measure)
+- Speak about keycloak as a service instead of Symfony authorization
+- **** make that the database created in the make start/build
+
+- Explain how we can add different entity Managers using doctrine.yaml, if we need to use different databases, etc
+- Explain how I develop the proyect:
+  - Contract with the costumer
+  - Controllers
+  - Use Case (Application)
+  - Repository
+  - Aggregated, domain value Objects
+  - Infrastructure
+   To avoid contamination (Persistence is an implementation detail)

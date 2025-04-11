@@ -39,3 +39,10 @@ composer-install: ## Installs composer dependencies
 
 ssh: ## bash into the be container
 	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} bash
+
+test:
+	#U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} php bin/phpunit
+	U_ID=${UID} docker exec -it --user ${UID} ${DOCKER_BE} composer test
+
+root: ## bash into the be container
+	docker exec -it --user root ${DOCKER_BE} bash

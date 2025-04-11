@@ -32,9 +32,6 @@ RUN apt install symfony-cli
 
 RUN mkdir -p /var/www/html
 
-# Config XDEBUG
-COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-
 # Update Apache config
 COPY ./default.conf /etc/apache2/sites-available/default.conf
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
@@ -43,7 +40,17 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && a2ensite default \
     && service apache2 restart
 
+# Config XDEBUG
+COPY xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 # Modify upload file size
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 WORKDIR /var/www/html
+
+COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
+RUN chmod +x /usr/local/bin/wait-for-it.sh
+
+CMD composer install --optimize-autoloader ; \
+    wait-for-it.sh app-mysql:3306 --timeout=30 --strict -- \
+    bin/console app:db:init --test; \
+    apache2-foreground
