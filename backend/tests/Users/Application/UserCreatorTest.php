@@ -8,6 +8,7 @@ use MarcusSports\Tests\Users\Application\Mother\CreateUserRequestMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserMother;
 use MarcusSports\Tests\Users\UserModuleUnitTestCase;
 use MarcusSports\Users\Application\Create\UserCreator;
+use RuntimeException;
 
 class UserCreatorTest extends UserModuleUnitTestCase
 {
@@ -28,5 +29,21 @@ class UserCreatorTest extends UserModuleUnitTestCase
         $this->creator->__invoke($request, $this->repository());
 
         $this->shouldSave($user);
+    }
+
+    public function test_it_should_throw_exception_when_repository_fails(): void
+    {
+        $request = CreateUserRequestMother::random();
+
+        $repository = $this->repository();
+
+        $repository->expects($this->once())
+            ->method('save')
+            ->willThrowException(new RuntimeException('Duplicate user'));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Duplicate user');
+
+        $this->creator->__invoke($request, $repository);
     }
 }

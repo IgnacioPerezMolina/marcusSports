@@ -14,12 +14,22 @@ use MarcusSports\Users\Domain\UserId;
 use MarcusSports\Users\Domain\UserLastName;
 use MarcusSports\Users\Domain\UserPassword;
 use MarcusSports\Users\Domain\UserUpdatedAt;
+use RuntimeException;
 
 final class UserCreator
 {
     public function __invoke(CreateUserRequest $request, UserRepository $repository): void
     {
         $id = new UserId($request->id());
+
+//        if ($repository->getByCriteria($request->email())) {
+//            throw new \RuntimeException('The email is already in use.');
+//        }
+        if ($repository->find($id)) {
+            throw new RuntimeException('Duplicate user');
+        }
+
+
         $firstName = new UserFirstName($request->firstName());
         $lastName = new UserLastName($request->lastName());
         $email = new UserEmail($request->email());

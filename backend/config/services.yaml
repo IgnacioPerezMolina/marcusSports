@@ -38,3 +38,5 @@ services:
 #        tags:
 #            - 'controller.service_arguments'
 #            - { name: 'monolog.logger', channel: 'domain_events' }
+
+    MarcusSports\Users\Domain\Repository\UserRepository: '@MarcusSports\Users\Infrastructure\Persistence\UserRepositoryDoctrineMysql'

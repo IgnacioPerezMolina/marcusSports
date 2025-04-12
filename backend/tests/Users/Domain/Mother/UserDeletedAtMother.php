@@ -10,7 +10,7 @@ use MarcusSports\Users\Domain\UserDeletedAt;
 
 final class UserDeletedAtMother
 {
-    public static function create(DateTimeImmutable $value): UserDeletedAt
+    public static function create(?DateTimeImmutable $value): UserDeletedAt
     {
         return new UserDeletedAt($value);
     }

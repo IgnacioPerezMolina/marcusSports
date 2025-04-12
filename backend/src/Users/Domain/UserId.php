@@ -8,5 +8,8 @@ use MarcusSports\Shared\Domain\ValueObject\Uuid;
 
 final class UserId extends Uuid
 {
-
+    public function __construct(string $value)
+    {
+        parent::__construct($value);
+    }
 }

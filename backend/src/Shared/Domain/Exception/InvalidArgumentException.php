@@ -12,6 +12,7 @@ class InvalidArgumentException extends DomainException
     public function __construct(string $message = "Invalid argument")
     {
         $this->httpCode = Response::HTTP_BAD_REQUEST;
+        $this->errorCode = 'invalid_argument';
         parent::__construct($message, $this->httpCode);
     }
 }

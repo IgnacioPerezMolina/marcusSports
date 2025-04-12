@@ -73,7 +73,7 @@ class User extends AggregateRoot
         return $this->updatedAt;
     }
 
-    public function deletedAt(): UserDeletedAt
+    public function deletedAt(): ?UserDeletedAt
     {
         return $this->deletedAt;
     }
