@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace MarcusSports\Users\Domain;
 
-use MarcusSports\Shared\Domain\ValueObject\StringValueObject;
+use MarcusSports\Shared\Domain\ValueObject\EmailValueObject;
 
-final class UserEmail extends StringValueObject
+final class UserEmail extends EmailValueObject
 {
     public function __construct(string $value)
     {

@@ -30,7 +30,5 @@ class UserPostControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseStatusCodeSame(201);
-
-//        $this->assertSame(201, $response->getStatusCode());
     }
 }

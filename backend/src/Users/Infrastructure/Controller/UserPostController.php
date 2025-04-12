@@ -24,7 +24,6 @@ class UserPostController
     public function __invoke(Request $request): Response
     {
         $data = json_decode($request->getContent(), false);
-        print_r('hans ' . $data->id);
         $this->userCreator->__invoke(
             new CreateUserRequest(
                 $data->id,
@@ -32,11 +31,6 @@ class UserPostController
                 $data->lastName,
                 $data->email,
                 $data->password
-//                $request->get('id'),
-//                $request->get('firstName'),
-//                $request->get('lastName'),
-//                $request->get('email'),
-//                $request->get('password')
             ),
             $this->repository
         );

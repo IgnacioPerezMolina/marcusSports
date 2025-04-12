@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace MarcusSports\Tests\Users\Domain\Mother;
 
 use DateTimeImmutable;
-use MarcusSports\Tests\Shared\Domain\DateTimeMother;
+use MarcusSports\Tests\Shared\Domain\DateTimeImmutableMother;
 use MarcusSports\Users\Domain\UserDeletedAt;
 
 final class UserDeletedAtMother
@@ -16,11 +16,11 @@ final class UserDeletedAtMother
     }
     public static function random(): UserDeletedAt
     {
-        return self::create(DateTimeMother::random());
+        return self::create(DateTimeImmutableMother::random());
     }
 
     public static function now(): UserDeletedAt
     {
-        return self::create(DateTimeMother::now());
+        return self::create(DateTimeImmutableMother::now());
     }
 }

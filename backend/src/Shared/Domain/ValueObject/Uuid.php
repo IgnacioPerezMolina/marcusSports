@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MarcusSports\Shared\Domain\ValueObject;
 
-use InvalidArgumentException;
+use MarcusSports\Shared\Domain\Exception\InvalidArgumentException;
 use Ramsey\Uuid\Uuid as RamseyUuid;
 
 class Uuid

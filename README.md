@@ -82,3 +82,4 @@ To speak About:
   - Aggregated, domain value Objects
   - Infrastructure
    To avoid contamination (Persistence is an implementation detail)
+- clone of DateTimeValueObject, to keep immutability

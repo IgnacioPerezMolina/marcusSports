@@ -27,6 +27,11 @@ class DateTimeImmutableValueObject
 
     public function __toString(): string
     {
-        return $this->value()->format('Y-m-d HH:mm');
+        return $this->value()->format('Y-m-d H:i:s');
+    }
+
+    public static function create(): static
+    {
+        return new static((new DateTimeImmutable()));
     }
 }

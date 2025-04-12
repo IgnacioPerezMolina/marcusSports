@@ -14,7 +14,7 @@ class DateTimeValueObject
     public function __construct(DateTime $value)
     {
         try {
-            $this->value = $value;
+            $this->value = clone $value;
         } catch (\Exception $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
@@ -22,7 +22,7 @@ class DateTimeValueObject
     }
     public function value(): DateTime
     {
-        return $this->value;
+        return clone $this->value;
     }
 
     public function __toString(): string
