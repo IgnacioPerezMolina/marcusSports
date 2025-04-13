@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MarcusSports\Shared\Infrastructure\Persistence;
+namespace MarcusSports\Shared\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\StringType;
 use MarcusSports\Users\Domain\UserUuid;
 
-class UserUuidType extends Type
+class UserUuidType extends StringType
 {
     public const NAME = 'user_uuid';
 

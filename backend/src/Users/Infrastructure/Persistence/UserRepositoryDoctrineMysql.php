@@ -7,7 +7,7 @@ namespace MarcusSports\Users\Infrastructure\Persistence;
 use MarcusSports\Shared\Domain\Criteria\Criteria;
 use MarcusSports\Shared\Domain\Criteria\FilterOperator;
 use MarcusSports\Shared\Domain\PaginatedResult;
-use MarcusSports\Shared\Infrastructure\Persistence\DoctrineRepository;
+use MarcusSports\Shared\Infrastructure\Persistence\Doctrine\DoctrineRepository;
 use MarcusSports\Shared\Infrastructure\Repository\OperatorMapper;
 use MarcusSports\Users\Domain\Repository\UserRepository;
 use MarcusSports\Users\Domain\User;

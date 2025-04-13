@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarcusSports\Shared\Infrastructure\Persistence;
+namespace MarcusSports\Shared\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;

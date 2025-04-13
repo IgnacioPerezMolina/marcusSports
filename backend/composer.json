@@ -10,6 +10,7 @@
         "doctrine/dbal": "^4.2",
         "doctrine/doctrine-bundle": "^2.14",
         "doctrine/orm": "^3.3",
+        "lambdish/phunctional": "^2.1",
         "ramsey/uuid": "^4.7",
         "symfony/console": "7.2.*",
         "symfony/dotenv": "7.2.*",

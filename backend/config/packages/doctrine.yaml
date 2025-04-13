@@ -2,7 +2,7 @@ doctrine:
   dbal:
     default_connection: 'default'
     types:
-      user_uuid: MarcusSports\Shared\Infrastructure\Persistence\UserUuidType
+      user_uuid: MarcusSports\Shared\Infrastructure\Persistence\Doctrine\UserUuidType
     connections:
       default:
         url: '%env(resolve:DATABASE_URL)%'
