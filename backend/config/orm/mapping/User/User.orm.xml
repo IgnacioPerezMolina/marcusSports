@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
     <entity name="MarcusSports\Users\Domain\User" table="`user`">
-        <id name="id" type="guid" column-definition="UUID NOT NULL"/>
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <embedded name="uuid" class="MarcusSports\Users\Domain\UserUuid" use-column-prefix="false" />
         <embedded name="email" class="MarcusSports\Users\Domain\UserEmail" use-column-prefix="false" />
         <embedded name="firstName" class="MarcusSports\Users\Domain\UserFirstName" use-column-prefix="false" />
         <embedded name="lastName" class="MarcusSports\Users\Domain\UserLastName" use-column-prefix="false" />
@@ -12,7 +15,7 @@
 
         <unique-constraints>
             <unique-constraint name="U_email_user" columns="email"/>
-            <unique-constraint name="U_uuid_user" columns="id"/>
+            <unique-constraint name="U_uuid_user" columns="uuid"/>
         </unique-constraints>
     </entity>
 </doctrine-mapping>

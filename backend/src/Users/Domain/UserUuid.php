@@ -6,7 +6,7 @@ namespace MarcusSports\Users\Domain;
 
 use MarcusSports\Shared\Domain\ValueObject\Uuid;
 
-final class UserId extends Uuid
+final class UserUuid extends Uuid
 {
     public function __construct(string $value)
     {

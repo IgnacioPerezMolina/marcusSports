@@ -8,7 +8,7 @@ use DateTime;
 use MarcusSports\Tests\Users\Domain\Mother\UserCreatedAtMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserEmailMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserFirstNameMother;
-use MarcusSports\Tests\Users\Domain\Mother\UserIdMother;
+use MarcusSports\Tests\Users\Domain\Mother\UserUuidMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserLastNameMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserPasswordMother;
@@ -27,7 +27,8 @@ class UserTest extends TestCase
 
     public function test_user_should_be_created_and_getters_return_expected_values(): void
     {
-        $id = UserIdMother::create('123e4567-e89b-12d3-a456-426614174000');
+//        $uuid = UserIdMother::create(1);
+        $uuid = UserUuidMother::create('123e4567-e89b-12d3-a456-426614174000');
         $firstName = UserFirstNameMother::create('Ignacio');
         $lastName = UserLastNameMother::create('Garcia');
         $email = UserEmailMother::create('email@example.com');
@@ -36,9 +37,9 @@ class UserTest extends TestCase
         $updatedAt = UserUpdatedAtMother::create(new DateTime('2023-04-12 14:00:00'));
         $deletedAt = null;
 
-        $user = new User($id, $firstName, $lastName, $email, $password, $createdAt, $updatedAt, $deletedAt);
+        $user = new User($uuid, $firstName, $lastName, $email, $password, $createdAt, $updatedAt, $deletedAt);
 
-        $this->assertSame('123e4567-e89b-12d3-a456-426614174000', $user->id()->value());
+        $this->assertSame('123e4567-e89b-12d3-a456-426614174000', $user->uuid()->value());
         $this->assertSame('Ignacio', $user->firstName()->value());
         $this->assertSame('Garcia', $user->lastName()->value());
         $this->assertSame('email@example.com', $user->email()->value());

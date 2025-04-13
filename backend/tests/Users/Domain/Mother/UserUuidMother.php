@@ -6,15 +6,15 @@ declare(strict_types=1);
 namespace MarcusSports\Tests\Users\Domain\Mother;
 
 use MarcusSports\Tests\Shared\Domain\UuidMother;
-use MarcusSports\Users\Domain\UserId;
+use MarcusSports\Users\Domain\UserUuid;
 
-final class UserIdMother
+final class UserUuidMother
 {
-    public static function create(string $value): UserId
+    public static function create(string $value): UserUuid
     {
-        return new UserId($value);
+        return new UserUuid($value);
     }
-    public static function random(): UserId
+    public static function random(): UserUuid
     {
         return self::create(UuidMother::random());
     }

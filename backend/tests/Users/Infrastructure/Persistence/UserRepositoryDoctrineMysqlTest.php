@@ -10,7 +10,7 @@ use MarcusSports\Tests\Users\Domain\Mother\UserCreatedAtMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserDeletedAtMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserEmailMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserFirstNameMother;
-use MarcusSports\Tests\Users\Domain\Mother\UserIdMother;
+use MarcusSports\Tests\Users\Domain\Mother\UserUuidMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserLastNameMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserPasswordMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserUpdatedAtMother;
@@ -42,12 +42,12 @@ final class UserRepositoryDoctrineMysqlTest extends WebTestCase
         $this->repository->save($user);
 
         // TODO which its better
-        $savedUser = $this->entityManager->getRepository(User::class)
-            ->find($user->id()->value());
-        $savedUser2 = $this->repository->find($user->id());
+//        $savedUser = $this->entityManager->getRepository(User::class)->find($user->uuid()->value());
+//        $savedUser = $this->entityManager->getRepository(User::class)->findOneBy(['uuid.value' => $user->uuid()->value()]);
+        $savedUser = $this->repository->find($user->uuid());
 
         $this->assertNotNull($savedUser);
-        $this->assertSame($user->id()->value(), $savedUser->id()->value());
+        $this->assertSame($user->uuid()->value(), $savedUser->uuid()->value());
         $this->assertSame($user->firstName()->value(), $savedUser->firstName()->value());
         $this->assertSame($user->lastName()->value(), $savedUser->lastName()->value());
         $this->assertSame($user->email()->value(), $savedUser->email()->value());
@@ -68,7 +68,7 @@ final class UserRepositoryDoctrineMysqlTest extends WebTestCase
         $this->entityManager->clear();
 
         $duplicateUser = UserMother::create(
-            UserIdMother::create($user->id()->value()),
+            UserUuidMother::create($user->uuid()->value()),
             UserFirstNameMother::create($user->firstName()->value()),
             UserLastNameMother::create($user->lastName()->value()),
             UserEmailMother::create($user->email()->value()),

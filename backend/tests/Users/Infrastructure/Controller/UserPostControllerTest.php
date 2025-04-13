@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace MarcusSports\Tests\Users\Infrastructure\Controller;
 
-use MarcusSports\Tests\Users\Domain\Mother\UserIdMother;
+use MarcusSports\Tests\Users\Domain\Mother\UserUuidMother;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserPostControllerTest extends WebTestCase
@@ -20,7 +20,7 @@ class UserPostControllerTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'id' => UserIdMother::random()->value(),
+                'uuid' => UserUuidMother::random()->value(),
                 'firstName' => 'Ignacio',
                 'lastName' => 'Garcia',
                 'email' => 'email@email.com',

@@ -6,24 +6,24 @@ namespace MarcusSports\Tests\Users\Application\Mother;
 
 use MarcusSports\Tests\Users\Domain\Mother\UserEmailMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserFirstNameMother;
-use MarcusSports\Tests\Users\Domain\Mother\UserIdMother;
+use MarcusSports\Tests\Users\Domain\Mother\UserUuidMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserLastNameMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserPasswordMother;
 use MarcusSports\Users\Application\Create\CreateUserRequest;
 use MarcusSports\Users\Domain\UserEmail;
 use MarcusSports\Users\Domain\UserFirstName;
-use MarcusSports\Users\Domain\UserId;
+use MarcusSports\Users\Domain\UserUuid;
 use MarcusSports\Users\Domain\UserLastName;
 use MarcusSports\Users\Domain\UserPassword;
 
 final class CreateUserRequestMother
 {
     public static function create(
-        UserId $id,
+        UserUuid      $id,
         UserFirstName $firstName,
-        UserLastName $lastName,
-        UserEmail $email,
-        UserPassword $password
+        UserLastName  $lastName,
+        UserEmail     $email,
+        UserPassword  $password
     ): CreateUserRequest
     {
         return new CreateUserRequest(
@@ -37,7 +37,7 @@ final class CreateUserRequestMother
     public static function random(): CreateUserRequest
     {
         return self::create(
-            UserIdMother::random(),
+            UserUuidMother::random(),
             UserFirstNameMother::random(),
             UserLastNameMother::random(),
             UserEmailMother::random(),
