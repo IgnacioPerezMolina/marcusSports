@@ -14,7 +14,9 @@ final class DbalCustomTypesRegistrar
     public static function register(array $customTypeClassNames): void
     {
         if (!self::$initialized) {
-            each(self::registerType(), $customTypeClassNames);
+            foreach ($customTypeClassNames as $customTypeClassName) {
+                Type::addType($customTypeClassName::customTypeName(), $customTypeClassName);
+            }
 
             self::$initialized = true;
         }

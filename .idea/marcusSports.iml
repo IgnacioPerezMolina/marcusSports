@@ -98,6 +98,7 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/theseer/tokenizer" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/hamcrest/hamcrest-php" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/mockery/mockery" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/lambdish/phunctional" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

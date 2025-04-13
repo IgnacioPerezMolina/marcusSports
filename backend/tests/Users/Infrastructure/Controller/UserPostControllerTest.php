@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MarcusSports\Tests\Users\Infrastructure\Controller;
 
+use MarcusSports\Tests\Users\Domain\Mother\UserEmailMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserUuidMother;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -23,7 +24,7 @@ class UserPostControllerTest extends WebTestCase
                 'id' => UserUuidMother::random()->value(),
                 'firstName' => 'Ignacio',
                 'lastName' => 'Garcia',
-                'email' => 'email@email.com',
+                'email' => UserEmailMother::random()->value(),
                 'password' => '12345678'
             ])
         );

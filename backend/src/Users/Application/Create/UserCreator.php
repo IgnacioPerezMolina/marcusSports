@@ -25,20 +25,11 @@ final class UserCreator
     {
         $id = new UserUuid($request->id());
 
-        $criteria = Criteria::fromFilters([
-            new Filter(
-                'email.value',
-                FilterOperator::EQUAL,
-                strtolower($request->email())
-            )
-        ],
-            limit: 1
-        );
+        // TODO Maybe I need to use another case of use to check this
+        $existentUser = $repository->findByEmail(new UserEmail($request->email()));
 
-        $paginatedResult = $repository->getByCriteria($criteria);
-
-        if ($paginatedResult->total() > 0) {
-            throw new \RuntimeException('The email is already in use.');
+        if ($existentUser !== null) {
+            throw new RuntimeException('The email is already in use.');
         }
 
         if ($repository->find($id)) {

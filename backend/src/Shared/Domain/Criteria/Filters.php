@@ -47,7 +47,6 @@ class Filters
                     $filters[] = $value;
                     continue;
                 }
-//                dd($field);
                 $filters[] = Filter::fromPrimitives($field, '=', $value);
             }
         }

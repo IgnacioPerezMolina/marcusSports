@@ -4,13 +4,23 @@ declare(strict_types=1);
 
 namespace MarcusSports\Tests\Users\Application;
 
-use MarcusSports\Shared\Domain\Criteria\Criteria;
-use MarcusSports\Shared\Domain\Criteria\FilterOperator;
-use MarcusSports\Shared\Domain\PaginatedResult;
 use MarcusSports\Tests\Users\Application\Mother\CreateUserRequestMother;
+use MarcusSports\Tests\Users\Domain\Mother\UserEmailMother;
+use MarcusSports\Tests\Users\Domain\Mother\UserFirstNameMother;
+use MarcusSports\Tests\Users\Domain\Mother\UserLastNameMother;
 use MarcusSports\Tests\Users\Domain\Mother\UserMother;
+use MarcusSports\Tests\Users\Domain\Mother\UserPasswordMother;
+use MarcusSports\Tests\Users\Domain\Mother\UserUuidMother;
 use MarcusSports\Tests\Users\UserModuleUnitTestCase;
 use MarcusSports\Users\Application\Create\UserCreator;
+use MarcusSports\Users\Domain\User;
+use MarcusSports\Users\Domain\UserCreatedAt;
+use MarcusSports\Users\Domain\UserEmail;
+use MarcusSports\Users\Domain\UserFirstName;
+use MarcusSports\Users\Domain\UserLastName;
+use MarcusSports\Users\Domain\UserPassword;
+use MarcusSports\Users\Domain\UserUpdatedAt;
+use MarcusSports\Users\Domain\UserUuid;
 use RuntimeException;
 
 class UserCreatorTest extends UserModuleUnitTestCase
@@ -50,41 +60,48 @@ class UserCreatorTest extends UserModuleUnitTestCase
         $this->creator->__invoke($request, $repository);
     }
 
-//    public function test_it_should_throw_exception_when_duplicate_email_exists(): void
-//    {
-//        $request = CreateUserRequestMother::random();
-//        $repository = $this->repository();
-//
-//        // Simulamos que ya existe al menos un usuario con ese email.
-//        // Creamos un Criteria que busque usuarios con el email pasado
-//        $criteria = Criteria::fromFilters([
-//            [
-//                'field'    => 'email.value',
-//                'operator' => FilterOperator::EQUAL->value,
-//                'value'    => strtolower($request->email())
-//            ]
-//        ]);
-//
-//        // Configuramos el mock del repositorio para que, al llamar a getByCriteria, devuelva un resultado con total > 0.
-//        $paginatedResult = $this->createMock(\MarcusSports\Shared\Domain\PaginatedResult::class);
-//        $paginatedResult->method('total')->willReturn(1);
-//
-//        $repository->expects($this->once())
-//            ->method('getByCriteria')
-//            ->with($this->callback(function ($criteriaPassed) use ($request) {
-//                // Verificamos que el filtro tenga la estructura correcta.
-//                // Por ejemplo, comprobamos que se ha definido la llave 'field' correctamente.
-//                $filters = $criteriaPassed->filters();
-//                // Aquí podrías agregar validaciones específicas sobre la estructura de los filters.
-//                return is_array($filters);
-//            }))
-//            ->willReturn($paginatedResult);
-//
-//        // Se espera que, al detectarse duplicidad, se lance una excepción
-//        $this->expectException(RuntimeException::class);
-//        $this->expectExceptionMessage('The email is already in use.');
-//
-//        // Invocamos el caso de uso.
-//        $this->creator->__invoke($request, $repository);
-//    }
+    public function test_it_should_throw_exception_when_duplicate_email_exists(): void
+    {
+        $request = CreateUserRequestMother::random();
+        $repository = $this->repository();
+
+        $firstUser = new User(
+            new UserUuid($request->id()),
+            new UserFirstName($request->firstName()),
+            new UserLastName($request->lastName()),
+            new UserEmail($request->email()),
+            new UserPassword($request->password()),
+            UserCreatedAt::create(),
+            UserUpdatedAt::create(),
+            null
+        );
+
+        $this->creator->__invoke($request, $repository);
+
+        $secondRequest = CreateUserRequestMother::create(
+            UserUuidMother::random(),
+            UserFirstNameMother::random(),
+            UserLastNameMother::random(),
+            UserEmailMother::create($request->email()),
+            UserPasswordMother::random()
+        );
+
+        $secondUser = new User(
+            new UserUuid($secondRequest->id()),
+            new UserFirstName($secondRequest->firstName()),
+            new UserLastName($secondRequest->lastName()),
+            new UserEmail($secondRequest->email()),
+            new UserPassword($secondRequest->password()),
+            UserCreatedAt::create(),
+            UserUpdatedAt::create(),
+            null
+        );
+
+        $this->shouldFindByEmail($secondUser, $firstUser);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The email is already in use.');
+
+        $this->creator->__invoke($secondRequest, $repository);
+    }
 }

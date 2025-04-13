@@ -22,4 +22,13 @@ class UserModuleUnitTestCase extends TestCase
     {
         return $this->repository = $this->repository ?: $this->createMock(UserRepository::class);
     }
+
+    protected function shouldFindByEmail(User $user, ?User $result): void
+    {
+        $this->repository()->expects($this->once())
+            ->method('findByEmail')
+            ->with($this->equalTo($user->email()))
+            ->willReturn($result);
+    }
+
 }

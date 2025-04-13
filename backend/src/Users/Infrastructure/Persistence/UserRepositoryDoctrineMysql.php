@@ -12,6 +12,7 @@ use MarcusSports\Shared\Infrastructure\Repository\OperatorMapper;
 use MarcusSports\Users\Domain\Repository\UserRepository;
 use MarcusSports\Users\Domain\User;
 use MarcusSports\Users\Domain\UserCollection;
+use MarcusSports\Users\Domain\UserEmail;
 use MarcusSports\Users\Domain\UserUuid;
 
 class UserRepositoryDoctrineMysql extends DoctrineRepository implements UserRepository
@@ -86,5 +87,10 @@ class UserRepositoryDoctrineMysql extends DoctrineRepository implements UserRepo
                 currentPage: $criteria->currentPage(),
                 itemsPerPage: $criteria->limit()
             );
+    }
+
+    public function findByEmail(UserEmail $userEmail): ?User
+    {
+        return $this->repository(User::class)->findOneBy(['email.value' => $userEmail->value()]);
     }
 }
