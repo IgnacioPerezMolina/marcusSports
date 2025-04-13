@@ -7,24 +7,24 @@ namespace MarcusSports\Users\Application\Create;
 
 final class CreateUserRequest
 {
-    private string $uuid;
+    private string $id;
     private string $firstName;
     private string $lastName;
     private string $email;
     private string $password;
 
-    public function __construct(string $uuid, string $firstName, string $lastName, string $email, string $password)
+    public function __construct(string $id, string $firstName, string $lastName, string $email, string $password)
     {
-        $this->uuid = $uuid;
+        $this->id = $id;
         $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->email = $email;
         $this->password = $password;
     }
 
-    public function uuid(): string
+    public function id(): string
     {
-        return $this->uuid;
+        return $this->id;
     }
 
     public function firstName(): string

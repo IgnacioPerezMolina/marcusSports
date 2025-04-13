@@ -26,7 +26,7 @@ class UserPostController
         $data = json_decode($request->getContent(), false);
         $this->userCreator->__invoke(
             new CreateUserRequest(
-                $data->uuid,
+                $data->id,
                 $data->firstName,
                 $data->lastName,
                 $data->email,

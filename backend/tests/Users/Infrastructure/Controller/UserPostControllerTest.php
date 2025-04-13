@@ -20,7 +20,7 @@ class UserPostControllerTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             json_encode([
-                'uuid' => UserUuidMother::random()->value(),
+                'id' => UserUuidMother::random()->value(),
                 'firstName' => 'Ignacio',
                 'lastName' => 'Garcia',
                 'email' => 'email@email.com',

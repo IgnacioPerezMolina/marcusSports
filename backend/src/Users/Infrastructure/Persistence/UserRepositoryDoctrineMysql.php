@@ -23,7 +23,7 @@ class UserRepositoryDoctrineMysql extends DoctrineRepository implements UserRepo
 
     public function find(UserUuid $uuid): ?User
     {
-        return $this->repository(User::class)->findOneBy(['uuid.value' => $uuid->value()]);
+        return $this->repository(User::class)->find($uuid);
     }
 
     public function getByCriteria(Criteria $criteria): PaginatedResult

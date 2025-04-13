@@ -18,7 +18,7 @@ use MarcusSports\Users\Domain\UserUpdatedAt;
 final class UserMother
 {
     public static function create(
-        UserUuid       $uuid,
+        UserUuid       $id,
         UserFirstName  $firstName,
         UserLastName   $lastName,
         UserEmail      $email,
@@ -27,13 +27,13 @@ final class UserMother
         UserUpdatedAt  $updatedAt,
         ?UserDeletedAt $deletedAt
     ): User {
-        return new User($uuid, $firstName, $lastName, $email, $password, $createdAt, $updatedAt, $deletedAt);
+        return new User($id, $firstName, $lastName, $email, $password, $createdAt, $updatedAt, $deletedAt);
     }
 
     public static function fromRequest(CreateUserRequest $request): User
     {
         return self::create(
-            UserUuidMother::create($request->uuid()),
+            UserUuidMother::create($request->id()),
             UserFirstNameMother::create($request->firstName()),
             UserLastNameMother::create($request->lastName()),
             UserEmailMother::create($request->email()),

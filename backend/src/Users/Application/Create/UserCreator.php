@@ -23,7 +23,7 @@ final class UserCreator
 {
     public function __invoke(CreateUserRequest $request, UserRepository $repository): void
     {
-        $uuid = new UserUuid($request->uuid());
+        $id = new UserUuid($request->id());
 
         $criteria = Criteria::fromFilters([
             new Filter(
@@ -41,7 +41,7 @@ final class UserCreator
             throw new \RuntimeException('The email is already in use.');
         }
 
-        if ($repository->find($uuid)) {
+        if ($repository->find($id)) {
             throw new RuntimeException('Duplicate user');
         }
 
@@ -54,7 +54,7 @@ final class UserCreator
         $deletedAt = null;
 
         $user = new User(
-            $uuid,
+            $id,
             $firstName,
             $lastName,
             $email,

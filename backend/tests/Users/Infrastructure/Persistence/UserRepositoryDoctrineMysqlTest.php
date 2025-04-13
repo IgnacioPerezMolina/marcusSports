@@ -42,12 +42,12 @@ final class UserRepositoryDoctrineMysqlTest extends WebTestCase
         $this->repository->save($user);
 
         // TODO which its better
-//        $savedUser = $this->entityManager->getRepository(User::class)->find($user->uuid()->value());
-//        $savedUser = $this->entityManager->getRepository(User::class)->findOneBy(['uuid.value' => $user->uuid()->value()]);
-        $savedUser = $this->repository->find($user->uuid());
+//        $savedUser = $this->entityManager->getRepository(User::class)->find($user->id()->value());
+//        $savedUser = $this->entityManager->getRepository(User::class)->findOneBy(['id.value' => $user->id()->value()]);
+        $savedUser = $this->repository->find($user->id());
 
         $this->assertNotNull($savedUser);
-        $this->assertSame($user->uuid()->value(), $savedUser->uuid()->value());
+        $this->assertSame($user->id()->value(), $savedUser->id()->value());
         $this->assertSame($user->firstName()->value(), $savedUser->firstName()->value());
         $this->assertSame($user->lastName()->value(), $savedUser->lastName()->value());
         $this->assertSame($user->email()->value(), $savedUser->email()->value());
@@ -68,7 +68,7 @@ final class UserRepositoryDoctrineMysqlTest extends WebTestCase
         $this->entityManager->clear();
 
         $duplicateUser = UserMother::create(
-            UserUuidMother::create($user->uuid()->value()),
+            UserUuidMother::create($user->id()->value()),
             UserFirstNameMother::create($user->firstName()->value()),
             UserLastNameMother::create($user->lastName()->value()),
             UserEmailMother::create($user->email()->value()),

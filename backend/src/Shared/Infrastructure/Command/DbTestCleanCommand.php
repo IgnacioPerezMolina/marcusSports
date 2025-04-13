@@ -41,10 +41,10 @@ class DbTestCleanCommand extends Command
         $schemaManager = $this->connection->createSchemaManager();
         $tables = $schemaManager->listTableNames();
 
-        foreach ($tables as $table) {
-            $output->writeln("Cleaning the table: $table");
-            $this->connection->executeStatement("TRUNCATE TABLE $table");
-        }
+//        foreach ($tables as $table) {
+//            $output->writeln("Cleaning the table: $table");
+//            $this->connection->executeStatement("TRUNCATE TABLE $table");
+//        }
 
         $this->connection->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
 
