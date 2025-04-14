@@ -71,7 +71,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "test": "APP_ENV=test vendor/bin/phpunit && php bin/console app:db-test:clean --env=test"
+        "test": "APP_ENV=test vendor/bin/phpunit ; php bin/console app:db-test:clean --env=test"
     },
     "conflict": {
         "symfony/symfony": "*"

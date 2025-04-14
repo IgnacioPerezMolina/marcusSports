@@ -11,7 +11,7 @@ final class UserPasswordMother
 {
     public static function create(string $value): UserPassword
     {
-        return self::fromPlain($value);
+        return new UserPassword($value);
     }
     public static function random(): UserPassword
     {

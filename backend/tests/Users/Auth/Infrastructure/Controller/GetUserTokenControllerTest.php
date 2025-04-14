@@ -36,7 +36,6 @@ class GetUserTokenControllerTest extends WebTestCase
 
         $userCreator->__invoke($request, $repository);
 
-        // Realizar la solicitud de login
         $client->request('POST', '/auth/login', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode([

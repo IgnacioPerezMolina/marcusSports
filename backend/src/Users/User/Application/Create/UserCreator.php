@@ -23,7 +23,6 @@ final class UserCreator
     {
         $id = new UserUuid($request->id());
 
-        // TODO Maybe I need to use another case of use to check this
         $existentUser = $repository->findByEmail(new UserEmail($request->email()));
 
         if ($existentUser !== null) {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MarcusSports\Users\User\Domain;
 
 use MarcusSports\Shared\Domain\ValueObject\StringValueObject;
+use MarcusSports\Users\Auth\Domain\PasswordHarsherHelper;
 
 final class UserPassword extends StringValueObject
 {
@@ -18,7 +19,7 @@ final class UserPassword extends StringValueObject
 
     public static function fromPlain(string $plainPassword): self
     {
-        $hashedPassword = password_hash($plainPassword, PASSWORD_BCRYPT);
+        $hashedPassword = PasswordHarsherHelper::hash($plainPassword);
         return new self($hashedPassword);
     }
 

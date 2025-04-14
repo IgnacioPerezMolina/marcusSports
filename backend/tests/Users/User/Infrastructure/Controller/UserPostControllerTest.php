@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class UserPostControllerTest extends WebTestCase
 {
+
     public function test_user_should_be_created()
     {
         $client = static::createClient();
