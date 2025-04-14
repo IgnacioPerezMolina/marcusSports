@@ -2,33 +2,35 @@
 
 declare(strict_types=1);
 
-
 namespace MarcusSports\Users\Auth\Application\Get;
 
+use MarcusSports\Users\Auth\Domain\BearerUser;
+use MarcusSports\Users\Auth\Domain\TokenGeneratorInterface;
 use RuntimeException;
 use MarcusSports\Users\Auth\Domain\AuthSession;
 use MarcusSports\Users\User\Domain\Repository\UserRepository;
 use MarcusSports\Users\User\Domain\UserEmail;
-use MarcusSports\Users\User\Domain\UserPassword;
 
 class LoginService
 {
-    public function __invoke(GetTokenRequest $request, UserRepository $repository): AuthSession
+    public function __invoke(GetTokenRequest $request, UserRepository $repository, TokenGeneratorInterface $tokenGenerator): AuthSession
     {
         $email = new UserEmail($request->email());
-        $password = new UserPassword($request->password());
 
         $user = $repository->findByEmail($email);
         if (!$user) {
-            throw new RuntimeException('Usuario no encontrado');
+            throw new RuntimeException('User not found');
         }
 
-        if (!$password->verify($password->value(), $user->passwordHash())) {
-            throw new RuntimeException('Contraseña incorrecta');
+        if (!$user->password()->verify($request->password())) {
+            throw new RuntimeException('Wrong password');
         }
 
-        $accessToken = $this->tokenGenerator->generateAccessToken($user);
-        $refreshToken = $this->tokenGenerator->generateRefreshToken($user);
+        $roles = ['ROLE_USER'];
+        $securityUser = new BearerUser($user, $roles);
+
+        $accessToken = $tokenGenerator->generateAccessToken($securityUser);
+        $refreshToken = $tokenGenerator->generateRefreshToken($securityUser);
 
         $createdAt = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
         $expiresAt = (new \DateTimeImmutable('+1 hour'))->format('Y-m-d H:i:s');
@@ -41,6 +43,8 @@ class LoginService
             $createdAt,
             'active'
         );
+
+        // domain Event
 
         return $authSession;
     }
