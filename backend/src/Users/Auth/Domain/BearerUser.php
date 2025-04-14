@@ -14,12 +14,10 @@ class BearerUser implements UserInterface, PasswordAuthenticatedUserInterface
     private User $user;
     private array $roles;
 
-    public function __construct(User $user, array $roles = [])
+    public function __construct(User $user)
     {
         $this->user = $user;
-        // Si no se pasan roles, puedes devolver un array vacío o
-        // incluso invocar un servicio que consulte la entidad de roles.
-        $this->roles = $roles;
+        $this->roles = [strtoupper($this->user->role()->value)];
     }
     public function getUserIdentifier(): string
     {
@@ -38,7 +36,6 @@ class BearerUser implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
-        // Si almacenas datos sensibles temporalmente, aquí los borras.
     }
 
     public function getUser(): User

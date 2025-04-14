@@ -12,6 +12,7 @@ class User extends AggregateRoot
     private UserFirstName $firstName;
     private UserLastName $lastName;
     private UserEmail $email;
+    private UserRole $role;
     private UserPassword $password;
     private UserCreatedAt $createdAt;
     private UserUpdatedAt $updatedAt;
@@ -22,6 +23,7 @@ class User extends AggregateRoot
         UserFirstName $firstName,
         UserLastName $lastName,
         UserEmail $email,
+        UserRole $role,
         UserPassword $password,
         UserCreatedAt $createdAt,
         UserUpdatedAt $updatedAt,
@@ -35,6 +37,7 @@ class User extends AggregateRoot
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
         $this->deletedAt = $deletedAt;
+        $this->role = $role;
     }
 
     public function id(): UserUuid
@@ -60,6 +63,11 @@ class User extends AggregateRoot
     public function password(): UserPassword
     {
         return $this->password;
+    }
+
+    public function role(): UserRole
+    {
+        return $this->role;
     }
 
     public function createdAt(): UserCreatedAt

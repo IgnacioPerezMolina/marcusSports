@@ -7,6 +7,7 @@
         <embedded name="email" class="MarcusSports\Users\User\Domain\UserEmail" use-column-prefix="false" />
         <embedded name="firstName" class="MarcusSports\Users\User\Domain\UserFirstName" use-column-prefix="false" />
         <embedded name="lastName" class="MarcusSports\Users\User\Domain\UserLastName" use-column-prefix="false" />
+        <field name="role" type="user_role" column="role" length="20" />
         <embedded name="password" class="MarcusSports\Users\User\Domain\UserPassword" use-column-prefix="false" />
         <embedded name="createdAt" class="MarcusSports\Users\User\Domain\UserCreatedAt" use-column-prefix="false" />
         <embedded name="updatedAt" class="MarcusSports\Users\User\Domain\UserUpdatedAt" use-column-prefix="false" />

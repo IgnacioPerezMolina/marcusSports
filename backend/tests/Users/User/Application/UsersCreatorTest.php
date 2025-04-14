@@ -19,6 +19,7 @@ use MarcusSports\Users\User\Domain\UserEmail;
 use MarcusSports\Users\User\Domain\UserFirstName;
 use MarcusSports\Users\User\Domain\UserLastName;
 use MarcusSports\Users\User\Domain\UserPassword;
+use MarcusSports\Users\User\Domain\UserRole;
 use MarcusSports\Users\User\Domain\UserUpdatedAt;
 use MarcusSports\Users\User\Domain\UserUuid;
 use RuntimeException;
@@ -70,6 +71,7 @@ class UsersCreatorTest extends UsersModuleUnitTestCase
             new UserFirstName($request->firstName()),
             new UserLastName($request->lastName()),
             new UserEmail($request->email()),
+            UserRole::USER,
             new UserPassword($request->password()),
             UserCreatedAt::create(),
             UserUpdatedAt::create(),
@@ -91,6 +93,7 @@ class UsersCreatorTest extends UsersModuleUnitTestCase
             new UserFirstName($secondRequest->firstName()),
             new UserLastName($secondRequest->lastName()),
             new UserEmail($secondRequest->email()),
+            UserRole::USER,
             new UserPassword($secondRequest->password()),
             UserCreatedAt::create(),
             UserUpdatedAt::create(),

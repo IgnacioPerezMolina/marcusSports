@@ -3,6 +3,7 @@ doctrine:
     default_connection: 'default'
     types:
       user_uuid: MarcusSports\Users\User\Infrastructure\Persistence\Doctrine\UserUuidType
+      user_role: MarcusSports\Users\User\Infrastructure\Persistence\Doctrine\UserRoleType
     connections:
       default:
         url: '%env(resolve:DATABASE_URL)%'

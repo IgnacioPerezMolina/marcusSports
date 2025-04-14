@@ -13,6 +13,7 @@ use MarcusSports\Tests\Users\User\Domain\Mother\UserFirstNameMother;
 use MarcusSports\Tests\Users\User\Domain\Mother\UserLastNameMother;
 use MarcusSports\Tests\Users\User\Domain\Mother\UserMother;
 use MarcusSports\Tests\Users\User\Domain\Mother\UserPasswordMother;
+use MarcusSports\Tests\Users\User\Domain\Mother\UserRoleMother;
 use MarcusSports\Tests\Users\User\Domain\Mother\UserUpdatedAtMother;
 use MarcusSports\Tests\Users\User\Domain\Mother\UserUuidMother;
 use MarcusSports\Users\User\Domain\Repository\UserRepository;
@@ -71,6 +72,7 @@ final class UserRepositoryDoctrineMysqlTest extends WebTestCase
             UserFirstNameMother::create($user->firstName()->value()),
             UserLastNameMother::create($user->lastName()->value()),
             UserEmailMother::create($user->email()->value()),
+            UserRoleMother::user(),
             UserPasswordMother::fromPlain($user->password()->value()),
             UserCreatedAtMother::create($user->createdAt()->value()),
             UserUpdatedAtMother::create($user->updatedAt()->value()),

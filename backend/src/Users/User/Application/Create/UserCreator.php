@@ -12,6 +12,7 @@ use MarcusSports\Users\User\Domain\UserEmail;
 use MarcusSports\Users\User\Domain\UserFirstName;
 use MarcusSports\Users\User\Domain\UserLastName;
 use MarcusSports\Users\User\Domain\UserPassword;
+use MarcusSports\Users\User\Domain\UserRole;
 use MarcusSports\Users\User\Domain\UserUpdatedAt;
 use MarcusSports\Users\User\Domain\UserUuid;
 use RuntimeException;
@@ -36,7 +37,8 @@ final class UserCreator
         $firstName = new UserFirstName($request->firstName());
         $lastName = new UserLastName($request->lastName());
         $email = new UserEmail($request->email());
-        $password = new UserPassword($request->password());
+        $password = UserPassword::fromPlain($request->password());
+        $role = UserRole::USER;
         $createdAt = UserCreatedAt::create();
         $updatedAt = UserUpdatedAt::create();
         $deletedAt = null;
@@ -46,6 +48,7 @@ final class UserCreator
             $firstName,
             $lastName,
             $email,
+            $role,
             $password,
             $createdAt,
             $updatedAt,
