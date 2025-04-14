@@ -1,0 +1,4 @@
+user_login:
+  path: /auth/login
+  controller: MarcusSports\Users\Auth\Infrastructure\Controller\GetUserTokenController
+  methods: [GET]

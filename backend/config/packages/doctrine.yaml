@@ -2,7 +2,7 @@ doctrine:
   dbal:
     default_connection: 'default'
     types:
-      user_uuid: MarcusSports\Users\Infrastructure\Persistence\Doctrine\UserUuidType
+      user_uuid: MarcusSports\Users\User\Infrastructure\Persistence\Doctrine\UserUuidType
     connections:
       default:
         url: '%env(resolve:DATABASE_URL)%'
@@ -20,7 +20,7 @@ doctrine:
                 is_bundle: false
                 type: xml
                 dir: '%kernel.project_dir%/config/orm/mapping/User'
-                prefix: 'MarcusSports\Users\Domain'
+                prefix: 'MarcusSports\Users\User\Domain'
                 alias: user_domain
 #      other-entity-manager:
 #        connection: other-entity-manager
