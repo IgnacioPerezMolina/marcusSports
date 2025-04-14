@@ -24,11 +24,10 @@ final class JWTTokenGenerator implements TokenGeneratorInterface
 
     public function generateRefreshToken(BearerUser $user): string
     {
-        // LexikJWTAuthenticationBundle no provee refresh token de forma nativa.
-        // Aquí puedes implementar tu lógica de refresh token o delegar a otro servicio.
-        // Un ejemplo sería reutilizar el JWT manager con un TTL mayor, o almacenar y gestionar el refresh token en BD.
-        // En este ejemplo, simplemente creamos otro token con un TTL diferente.
-        // Nota: Es recomendable manejar refresh tokens de forma separada.
+        // LexikJWTAuthenticationBundle doesn't generate refresh tokens by default.
+        // You can implement refresh token logic here or delegate it to another service.
+        // In this example we just create another token with a different TTL.
+        // It's best to handle refresh tokens separately.
         return $this->jwtManager->create($user);
     }
 }

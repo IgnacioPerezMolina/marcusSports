@@ -44,7 +44,7 @@ class LoginService
             'active'
         );
 
-        // domain Event
+        // TODO add domain Event
 
         return $authSession;
     }

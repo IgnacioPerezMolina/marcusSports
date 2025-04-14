@@ -28,12 +28,9 @@ final class BearerUserProvider implements UserProviderInterface
             throw new UserNotFoundException(sprintf('User with id "%s" not found', $identifier));
         }
 
-        // Aquí puedes asignar roles de forma fija o consultarlos según la lógica de tu dominio.
-        $roles = ['ROLE_USER'];
-        return new BearerUser($user, $roles);
+        return new BearerUser($user);
     }
 
-    // Para compatibilidad con Symfony < 5.3:
     public function loadUserByUsername(string $username): UserInterface
     {
         return $this->loadUserByIdentifier($username);

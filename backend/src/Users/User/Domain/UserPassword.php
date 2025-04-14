@@ -32,19 +32,19 @@ final class UserPassword extends StringValueObject
     {
         if (strlen($value) < self::MIN_LENGTH) {
             throw new \InvalidArgumentException(
-                sprintf('El password debe tener al menos %d caracteres.', self::MIN_LENGTH)
+                sprintf('Password must have at least %d characters.', self::MIN_LENGTH)
             );
         }
 
         if (strlen($value) > self::MAX_LENGTH) {
             throw new \InvalidArgumentException(
-                sprintf('El password no puede tener más de %d caracteres.', self::MAX_LENGTH)
+                sprintf('The password cannot be longer than %d characters.', self::MAX_LENGTH)
             );
         }
 
         if (!preg_match('/[A-Za-z]/', $value) || !preg_match('/[0-9]/', $value)) {
             throw new \InvalidArgumentException(
-                'El password debe contener al menos una letra y un número.'
+                'Password must contain at least one letter and one number.'
             );
         }
     }

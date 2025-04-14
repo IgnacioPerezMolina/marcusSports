@@ -28,15 +28,12 @@ class Collection implements Iterator
         return new self([], $type);
     }
 
-    //TODO: Poder añadir elementos a la colección
     public function append(mixed $element): void
     {
         $this->guardAgainstInvalidType($element);
         $this->items[] = $element;
     }
-    //TODO: Que estos elementos sean objetos
-    //TODO: Que sólo pueda añadir objetos de la misma clase o interfaz
-    //TODO: Que pueda añadir objetos de subclases de la original
+
     private function guardAgainstInvalidType(mixed $element): void
     {
         if (!is_object($element)) {
@@ -50,7 +47,6 @@ class Collection implements Iterator
         }
     }
 
-    //TODO: Que pueda iterar a través de todos los elementos y hacer algo con ellos (each)
     public function each(callable $function): Collection
     {
         if (!count($this->items) > 0) {
@@ -61,7 +57,6 @@ class Collection implements Iterator
         return $this;
     }
 
-    //TODO: Que pueda devolver un array de transformaciones de los objetos (map)
     public function map(callable $function): Collection
     {
         if ($this->count() === 0) {
@@ -79,8 +74,6 @@ class Collection implements Iterator
         return $mapped;
     }
 
-    //TODO: Que pueda devolver una Collection de objetos filtrados conforme a un criterio (filter)
-
     public function filter(callable $function): Collection
     {
         $filtered = Collection::of($this->type());
@@ -97,7 +90,6 @@ class Collection implements Iterator
         return $filtered;
     }
 
-    //TODO: que pueda devolver un elemento buscado por criterio
     public function getBy(callable $function): mixed
     {
         if ($this->count() === 0) {
@@ -113,7 +105,6 @@ class Collection implements Iterator
         throw new OutOfBoundsException('Element not found');
     }
 
-    //TODO: Que pueda agregar la Collection (reduce)
     public function reduce(callable $function, mixed $initial): mixed
     {
         if ($this->count() === 0) {

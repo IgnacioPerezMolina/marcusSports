@@ -18,14 +18,11 @@ class GetUserTokenControllerTest extends WebTestCase
 {
     public function test_get_user_token_successful(): void
     {
-        // Iniciar el cliente, lo que también inicia el kernel
         $client = static::createClient();
 
-        // Ahora podemos acceder al contenedor de forma segura
         $userCreator = self::getContainer()->get(UserCreator::class);
         $repository = self::getContainer()->get('MarcusSports\Users\User\Domain\Repository\UserRepository');
 
-        // Crear un usuario para el test
         $request = CreateUserRequestMother::create(
             UserUuidMother::random(),
             UserFirstNameMother::random(),

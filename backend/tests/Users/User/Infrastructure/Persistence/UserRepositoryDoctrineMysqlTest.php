@@ -30,9 +30,6 @@ final class UserRepositoryDoctrineMysqlTest extends WebTestCase
 
         $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
         $this->repository = static::getContainer()->get(UserRepository::class);
-
-        // (Opcional) Limpia la base de datos de test para asegurar que cada test arranca en un estado limpio,
-        // ya sea mediante un comando custom o mediante alguna estrategia de borrado.
     }
 
     public function test_it_can_save_and_retrieve_a_user(): void
@@ -41,9 +38,6 @@ final class UserRepositoryDoctrineMysqlTest extends WebTestCase
 
         $this->repository->save($user);
 
-        // TODO which its better
-//        $savedUser = $this->entityManager->getRepository(User::class)->find($user->id()->value());
-//        $savedUser = $this->entityManager->getRepository(User::class)->findOneBy(['id.value' => $user->id()->value()]);
         $savedUser = $this->repository->find($user->id());
 
         $this->assertNotNull($savedUser);
