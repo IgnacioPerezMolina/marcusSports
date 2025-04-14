@@ -1,0 +1,40 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    providers:
+        bearer_user_provider:
+            id: MarcusSports\Users\Auth\Infrastructure\Provider\BearerUserProvider
+
+    firewalls:
+        login:
+            pattern: ^/auth/login
+            stateless: true
+            json_login:
+                check_path: /auth/login
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern: ^/api
+            stateless: true
+            provider: bearer_user_provider
+            jwt: ~
+
+        health_check:
+            pattern: ^/health-check
+            security: false
+
+    access_control:
+        - { path: ^/auth/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+
+when@test:
+    security:
+        password_hashers:
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon

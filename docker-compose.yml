@@ -23,7 +23,7 @@ services:
 
   app-mysql:
     container_name: app-mysql
-    image: mysql:8.2.0
+    image: mysql:9.1
     ports:
       - "3336:3306"
     environment:

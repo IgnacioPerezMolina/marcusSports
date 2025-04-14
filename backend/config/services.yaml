@@ -28,10 +28,23 @@ services:
         arguments:
             $environment: '%kernel.environment%'
 
-    MarcusSports\Users\Infrastructure\Controller\:
-        resource: '../src/Users/Infrastructure/Controller'
+    MarcusSports\Users\User\Infrastructure\Controller\:
+        resource: '../src/Users/User/Infrastructure/Controller'
         tags:
             - 'controller.service_arguments'
+
+    MarcusSports\Users\Auth\Infrastructure\Controller\:
+        resource: '../src/Users/Auth/Infrastructure/Controller'
+        tags:
+            - 'controller.service_arguments'
+
+    MarcusSports\Users\Auth\Infrastructure\JWTTokenGenerator:
+        arguments:
+            - '@lexik_jwt_authentication.jwt_manager'
+
+    MarcusSports\Users\Auth\Infrastructure\Provider\BearerUserProvider:
+        arguments:
+            - '@MarcusSports\Users\User\Domain\Repository\UserRepository'
 
 #    TeamEQ\Laravel\User\Infrastructure\:
 #        resource: '../src/Laravel/User/Infrastructure/'
@@ -39,4 +52,4 @@ services:
 #            - 'controller.service_arguments'
 #            - { name: 'monolog.logger', channel: 'domain_events' }
 
-    MarcusSports\Users\Domain\Repository\UserRepository: '@MarcusSports\Users\Infrastructure\Persistence\UserRepositoryDoctrineMysql'
+    MarcusSports\Users\User\Domain\Repository\UserRepository: '@MarcusSports\Users\User\Infrastructure\Persistence\UserRepositoryDoctrineMysql'

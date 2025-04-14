@@ -83,3 +83,4 @@ To speak About:
   - Infrastructure
    To avoid contamination (Persistence is an implementation detail)
 - clone of DateTimeValueObject, to keep immutability
+- Explain why I dont add more complexity to Roles and how can I make it with permissions, etc

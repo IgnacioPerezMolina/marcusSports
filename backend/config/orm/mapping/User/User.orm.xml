@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
-    <entity name="MarcusSports\Users\Domain\User" table="`user`">
-        <id name="id" type="guid" column-definition="UUID NOT NULL"/>
-        <embedded name="email" class="MarcusSports\Users\Domain\UserEmail" use-column-prefix="false" />
-        <embedded name="firstName" class="MarcusSports\Users\Domain\UserFirstName" use-column-prefix="false" />
-        <embedded name="lastName" class="MarcusSports\Users\Domain\UserLastName" use-column-prefix="false" />
-        <embedded name="password" class="MarcusSports\Users\Domain\UserPassword" use-column-prefix="false" />
-        <embedded name="createdAt" class="MarcusSports\Users\Domain\UserCreatedAt" use-column-prefix="false" />
-        <embedded name="updatedAt" class="MarcusSports\Users\Domain\UserUpdatedAt" use-column-prefix="false" />
-        <embedded name="deletedAt" class="MarcusSports\Users\Domain\UserDeletedAt" use-column-prefix="false" />
+    <entity name="MarcusSports\Users\User\Domain\User" table="`user`">
+        <id name="id" type="user_uuid" column="id">
+            <generator strategy="NONE"/>
+        </id>
+        <embedded name="email" class="MarcusSports\Users\User\Domain\UserEmail" use-column-prefix="false" />
+        <embedded name="firstName" class="MarcusSports\Users\User\Domain\UserFirstName" use-column-prefix="false" />
+        <embedded name="lastName" class="MarcusSports\Users\User\Domain\UserLastName" use-column-prefix="false" />
+        <field name="role" type="user_role" column="role" length="20" />
+        <embedded name="password" class="MarcusSports\Users\User\Domain\UserPassword" use-column-prefix="false" />
+        <embedded name="createdAt" class="MarcusSports\Users\User\Domain\UserCreatedAt" use-column-prefix="false" />
+        <embedded name="updatedAt" class="MarcusSports\Users\User\Domain\UserUpdatedAt" use-column-prefix="false" />
+        <embedded name="deletedAt" class="MarcusSports\Users\User\Domain\UserDeletedAt" use-column-prefix="false" />
 
         <unique-constraints>
             <unique-constraint name="U_email_user" columns="email"/>
-            <unique-constraint name="U_uuid_user" columns="id"/>
+            <unique-constraint name="U_uuid_user" columns="uuid"/>
         </unique-constraints>
     </entity>
 </doctrine-mapping>
