@@ -12,6 +12,9 @@ doctrine:
       part_item_status: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemStatusType
       part_item_price: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemPriceType
       compatibility_rule_uuid: MarcusSports\Catalog\CompatibilityRule\Infrastructure\Persistence\Doctrine\CompatibilityRuleUuidType
+      price_modifier_uuid: MarcusSports\Catalog\PriceModifier\Infrastructure\Persistence\Doctrine\PriceModifierUuidType
+      price_modifier_scope: MarcusSports\Catalog\PriceModifier\Infrastructure\Persistence\Doctrine\PriceModifierScopeType
+      price_modifier_adjustment: MarcusSports\Catalog\PriceModifier\Infrastructure\Persistence\Doctrine\PriceModifierAdjustmentType
     connections:
       default:
         url: '%env(resolve:DATABASE_URL)%'
@@ -55,6 +58,12 @@ doctrine:
               dir: '%kernel.project_dir%/config/orm/mapping/CompatibilityRule'
               prefix: 'MarcusSports\Catalog\CompatibilityRule\Domain'
               alias: compatibility_rule_domain
+            price_modifier:
+              is_bundle: false
+              type: xml
+              dir: '%kernel.project_dir%/config/orm/mapping/PriceModifier'
+              prefix: 'MarcusSports\Catalog\PriceModifier\Domain'
+              alias: price_modifier
 #      other-entity-manager:
 #        connection: other-entity-manager
 #        #naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

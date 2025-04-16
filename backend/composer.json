@@ -23,6 +23,7 @@
         "symfony/yaml": "7.2.*"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^4.1",
         "fakerphp/faker": "^1.24",
         "guzzlehttp/guzzle": "^7.9",
         "mockery/mockery": "^1.6",

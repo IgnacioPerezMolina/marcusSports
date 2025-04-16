@@ -16,7 +16,10 @@
         <embedded name="createdAt" class="MarcusSports\Catalog\PartType\Domain\PartTypeCreatedAt" use-column-prefix="false" />
         <embedded name="updatedAt" class="MarcusSports\Catalog\PartType\Domain\PartTypeUpdatedAt" use-column-prefix="false" />
         <embedded name="deletedAt" class="MarcusSports\Catalog\PartType\Domain\PartTypeDeletedAt" use-column-prefix="false" />
-
-        <one-to-many field="partItems" target-entity="MarcusSports\Catalog\PartItem\Domain\PartItem" mapped-by="partTypeId"/>
+        <one-to-many field="partItems" target-entity="MarcusSports\Catalog\PartItem\Domain\PartItem" mapped-by="partTypeId">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
     </entity>
 </doctrine-mapping>

@@ -8,7 +8,7 @@ use MarcusSports\Shared\Domain\Collection;
 
 final class PartTypeCollection extends Collection
 {
-    protected string $type = PartType::class;
+    public ?string $type = PartType::class;
 
     public function __construct(array $elements = [])
     {

@@ -22,7 +22,7 @@ final class PartItemLabel extends StringValueObject
             throw new InvalidArgumentException('The label cannot be empty.');
         }
 
-        if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\'-]+$/', $value)) {
+        if (!preg_match('/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s\'-]+$/', $value)) {
             throw new InvalidArgumentException(sprintf('The label "%s" contains invalid characters.', $value));
         }
 

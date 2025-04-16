@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                        https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="MarcusSports\Catalog\PriceModifier\Domain\PriceModifier" table="price_modifiers">
+        <id name="id" type="price_modifier_uuid" column="id">
+            <generator strategy="NONE"/>
+        </id>
+
+        <many-to-one field="productId" target-entity="MarcusSports\Catalog\Product\Domain\Product">
+            <join-column name="product_id" referenced-column-name="id" on-delete="CASCADE" nullable="false"/>
+        </many-to-one>
+
+        <embedded name="condition" class="MarcusSports\Catalog\PriceModifier\Domain\PriceModifierCondition" use-column-prefix="false" />
+        <field name="adjustment" type="price_modifier_adjustment" column="adjustment" precision="10" scale="2" />
+        <field name="scope" type="price_modifier_scope" column="scope" length="20" />
+    </entity>
+</doctrine-mapping>

@@ -5,12 +5,12 @@ declare(strict_types=1);
 
 namespace MarcusSports\Catalog\PartItem\Domain;
 
-use MarcusSports\Catalog\PartType\Domain\PartTypeUuid;
+use MarcusSports\Catalog\PartType\Domain\PartType;
 
 class PartItem
 {
     private PartItemUuid $id;
-    private PartTypeUuid $partTypeId;
+    private PartType $partTypeId;
     private PartItemLabel $label;
     private PartItemPrice $price;
     private PartItemStatus $status;
@@ -23,7 +23,7 @@ class PartItem
 
     public function __construct(
         PartItemUuid          $id,
-        PartTypeUuid          $partTypeId,
+        PartType              $partTypeId,
         PartItemLabel         $label,
         PartItemPrice         $price,
         PartItemStatus        $status,
@@ -51,7 +51,7 @@ class PartItem
         return $this->id;
     }
 
-    public function partTypeId(): PartTypeUuid
+    public function partTypeId(): PartType
     {
         return $this->partTypeId;
     }

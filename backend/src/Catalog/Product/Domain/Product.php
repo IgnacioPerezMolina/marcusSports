@@ -5,8 +5,8 @@ declare(strict_types=1);
 
 namespace MarcusSports\Catalog\Product\Domain;
 
-use MarcusSports\Catalog\CompatibilityRule\Domain\CompatibilityRuleCollection;
-use MarcusSports\Catalog\PartType\Domain\PartTypeCollection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use MarcusSports\Shared\Domain\Aggregate\AggregateRoot;
 
 class Product extends AggregateRoot
@@ -16,31 +16,32 @@ class Product extends AggregateRoot
     private ProductDescription $description;
     private ProductCategory $category;
     private ProductBasePrice $basePrice;
-    private ?PartTypeCollection $partTypes;
-    private ?CompatibilityRuleCollection $rules;
+    private ?Collection $partTypes;
+    private ?Collection $rules;
     private ProductCreatedAt $createdAt;
     private ProductUpdatedAt $updatedAt;
     private ?ProductDeletedAt $deletedAt;
 
     public function __construct(
-        ProductUuid                 $id,
-        ProductName                 $name,
-        ProductDescription          $description,
-        ProductCategory             $category,
-        ProductBasePrice            $basePrice,
-        ?PartTypeCollection          $partTypes,
-        ?CompatibilityRuleCollection $rules,
-        ProductCreatedAt           $createdAt,
-        ProductUpdatedAt           $updatedAt,
-        ?ProductDeletedAt          $deletedAt
-    ) {
+        ProductUuid        $id,
+        ProductName        $name,
+        ProductDescription $description,
+        ProductCategory    $category,
+        ProductBasePrice   $basePrice,
+        ?Collection        $partTypes,
+        ?Collection        $rules,
+        ProductCreatedAt   $createdAt,
+        ProductUpdatedAt   $updatedAt,
+        ?ProductDeletedAt  $deletedAt
+    )
+    {
         $this->id = $id;
         $this->name = $name;
         $this->description = $description;
         $this->category = $category;
         $this->basePrice = $basePrice;
-        $this->partTypes = $partTypes;
-        $this->rules = $rules;
+        $this->partTypes = $partTypes ?? new ArrayCollection();
+        $this->rules = $rules ?? new ArrayCollection();
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
         $this->deletedAt = $deletedAt;
@@ -71,12 +72,12 @@ class Product extends AggregateRoot
         return $this->basePrice;
     }
 
-    public function partTypes(): PartTypeCollection
+    public function partTypes(): ArrayCollection
     {
         return $this->partTypes;
     }
 
-    public function rules(): CompatibilityRuleCollection
+    public function rules(): ArrayCollection
     {
         return $this->rules;
     }
@@ -94,5 +95,19 @@ class Product extends AggregateRoot
     public function deletedAt(): ?ProductDeletedAt
     {
         return $this->deletedAt;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id->value(),
+            'name' => $this->name->value(),
+            'description' => $this->description->value(),
+            'category' => $this->category->value(),
+            'basePrice' => $this->basePrice->value(),
+            'createdAt' => $this->createdAt->value()->format('c'),
+            'updatedAt' => $this->updatedAt->value()->format('c'),
+            'deletedAt' => $this->deletedAt && $this->deletedAt->value() ? $this->deletedAt->value()->format('c') : null,
+        ];
     }
 }

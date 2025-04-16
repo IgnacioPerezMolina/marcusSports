@@ -12,4 +12,6 @@ interface ProductRepository
 {
     public function save(Product $product): void;
     public function find(ProductUuid $uuid): ?Product;
+
+    public function findAll(): array;
 }

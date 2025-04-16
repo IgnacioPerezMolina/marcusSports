@@ -22,7 +22,7 @@ final class PartTypeName extends StringValueObject
             throw new InvalidArgumentException('The part type name cannot be empty.');
         }
 
-        if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\'-]+$/', $value)) {
+        if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ:\s\'-]+$/', $value)) {
             throw new InvalidArgumentException(sprintf('The part type name "%s" contains invalid characters.', $value));
         }
 

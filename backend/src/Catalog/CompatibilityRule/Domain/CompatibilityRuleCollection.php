@@ -8,7 +8,7 @@ use MarcusSports\Shared\Domain\Collection;
 
 final class CompatibilityRuleCollection extends Collection
 {
-    protected string $type = CompatibilityRule::class;
+    protected ?string $type = CompatibilityRule::class;
 
     public function __construct(array $elements = [])
     {

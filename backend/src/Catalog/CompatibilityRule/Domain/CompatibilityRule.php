@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace MarcusSports\Catalog\CompatibilityRule\Domain;
 
-use MarcusSports\Catalog\Product\Domain\ProductUuid;
+use MarcusSports\Catalog\Product\Domain\Product;
 
 class CompatibilityRule
 {
     private CompatibilityRuleUuid $id;
-    private ProductUuid $productId;
+    private Product $productId;
     private RuleExpression $ruleExpression;
 
     public function __construct(
         CompatibilityRuleUuid $id,
-        ProductUuid $productId,
+        Product $productId,
         RuleExpression $ruleExpression
     ) {
         $this->id = $id;
@@ -26,7 +26,7 @@ class CompatibilityRule
         return $this->id;
     }
 
-    public function productId(): ProductUuid
+    public function productId(): Product
     {
         return $this->productId;
     }

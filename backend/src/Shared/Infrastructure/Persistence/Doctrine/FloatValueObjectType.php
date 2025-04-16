@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace MarcusSports\Shared\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\FloatType;
+use Doctrine\DBAL\Types\Type;
 use MarcusSports\Shared\Infrastructure\Doctrine\Dbal\DoctrineCustomType;
 
-abstract class FloatValueObjectType extends FloatType implements DoctrineCustomType
+abstract class FloatValueObjectType extends Type implements DoctrineCustomType
 {
     abstract protected function typeClassName(): string;
 
@@ -18,7 +18,7 @@ abstract class FloatValueObjectType extends FloatType implements DoctrineCustomT
         return $platform->getDecimalTypeDeclarationSQL($column);
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?float
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?object
     {
         if ($value === null || $value === '') {
             return null;
@@ -44,5 +44,10 @@ abstract class FloatValueObjectType extends FloatType implements DoctrineCustomT
     public function getName(): string
     {
         return static::customTypeName();
+    }
+
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
+        return true;
     }
 }

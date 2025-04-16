@@ -89,3 +89,4 @@ To speak About:
 
 
 - OverEngineering because I want to show 
+- DSL into validations for json fields

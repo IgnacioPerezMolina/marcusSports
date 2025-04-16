@@ -2,3 +2,8 @@ product_post:
   path: /product
   controller: MarcusSports\Catalog\Product\Infrastructure\Controller\ProductPostController
   methods: [POST]
+
+products_get:
+  path: /product
+  controller: MarcusSports\Catalog\Product\Infrastructure\Controller\ProductsGetController
+  methods: [GET]

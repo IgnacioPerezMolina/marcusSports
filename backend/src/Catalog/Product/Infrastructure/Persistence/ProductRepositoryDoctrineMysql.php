@@ -20,4 +20,9 @@ class ProductRepositoryDoctrineMysql extends DoctrineRepository implements Produ
     {
         return $this->repository(Product::class)->find($uuid);
     }
+
+    public function findAll(): array
+    {
+        return $this->repository(Product::class)->findAll();
+    }
 }

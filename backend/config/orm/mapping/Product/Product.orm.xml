@@ -16,7 +16,7 @@
         <embedded name="updatedAt" class="MarcusSports\Catalog\Product\Domain\ProductUpdatedAt" use-column-prefix="false" />
         <embedded name="deletedAt" class="MarcusSports\Catalog\Product\Domain\ProductDeletedAt" use-column-prefix="false" />
 
-        <one-to-many field="partTypes" target-entity="MarcusSports\Catalog\PartType\Domain\PartType" mapped-by="productId" orphan-removal="true">
+        <one-to-many field="partTypes" target-entity="MarcusSports\Catalog\PartType\Domain\PartType" mapped-by="product" orphan-removal="true">
             <cascade>
                 <cascade-all/>
             </cascade>
