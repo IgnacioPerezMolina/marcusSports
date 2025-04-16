@@ -53,13 +53,13 @@ This repository contains the basic configuration to run Symfony applications wit
     /vendor/
     ###< symfony/framework-bundle ###
     ```
-6. Once you have installed you Symfony application go to http://localhost:1000
+6. Once you’ve installed you Symfony application go to http://localhost:1000
 
 
 
 
 To speak About:
-- health check.
+- health check. - Ask to interviewer
 - Layers (Domain, application and Infrastructure)
 - Value Object (UUID infrastructure inside Domain and explication)
 - TDD
@@ -69,7 +69,7 @@ To speak About:
 
 - Testing
 - Mothers
-- About, save unfinished order into a database or what, I discovered a use case to uso that information to send a help email to support the order and finish it. I am not sure if later I am going to delete data from database or maybe set an state (Depends on product decisions and metrics that we want to measure)
+- About, save unfinished order into a database or what, I discovered a use case to uso that information to send a help email to support the order and finish it. I’m not sure if later I’m going to delete data from database or maybe set an state (Depends on product decisions and metrics that we want to measure)
 - Speak about keycloak as a service instead of Symfony authorization
 - **** make that the database created in the make start/build
 
@@ -84,3 +84,8 @@ To speak About:
    To avoid contamination (Persistence is an implementation detail)
 - clone of DateTimeValueObject, to keep immutability
 - Explain why I dont add more complexity to Roles and how can I make it with permissions, etc
+
+- DECISION - I create a PartType as AggregatedRoot because maybe Marcus wants to sell parts, and it doesn't depend on a Product
+
+
+- OverEngineering because I want to show 

@@ -1,0 +1,4 @@
+compatibility_rule_post:
+  path: /compatibility-rule
+  controller: MarcusSports\Catalog\CompatibilityRule\Infrastructure\Controller\CompatibilityRulePostController
+  methods: [POST]

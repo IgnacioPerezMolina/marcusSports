@@ -4,6 +4,14 @@ doctrine:
     types:
       user_uuid: MarcusSports\Users\User\Infrastructure\Persistence\Doctrine\UserUuidType
       user_role: MarcusSports\Users\User\Infrastructure\Persistence\Doctrine\UserRoleType
+      product_uuid: MarcusSports\Catalog\Product\Infrastructure\Persistence\Doctrine\ProductUuidType
+      product_base_price: MarcusSports\Catalog\Product\Infrastructure\Persistence\Doctrine\ProductPriceType
+      product_category: MarcusSports\Catalog\Product\Infrastructure\Persistence\Doctrine\ProductCategoryType
+      part_type_uuid: MarcusSports\Catalog\PartType\Infrastructure\Persistence\Doctrine\PartTypeUuidType
+      part_item_uuid: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemUuidType
+      part_item_status: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemStatusType
+      part_item_price: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemPriceType
+      compatibility_rule_uuid: MarcusSports\Catalog\CompatibilityRule\Infrastructure\Persistence\Doctrine\CompatibilityRuleUuidType
     connections:
       default:
         url: '%env(resolve:DATABASE_URL)%'
@@ -23,6 +31,30 @@ doctrine:
                 dir: '%kernel.project_dir%/config/orm/mapping/User'
                 prefix: 'MarcusSports\Users\User\Domain'
                 alias: user_domain
+            product_domain:
+              is_bundle: false
+              type: xml
+              dir: '%kernel.project_dir%/config/orm/mapping/Product'
+              prefix: 'MarcusSports\Catalog\Product\Domain'
+              alias: product_domain
+            part_type_domain:
+              is_bundle: false
+              type: xml
+              dir: '%kernel.project_dir%/config/orm/mapping/PartType'
+              prefix: 'MarcusSports\Catalog\PartType\Domain'
+              alias: part_type_domain
+            part_item_domain:
+              is_bundle: false
+              type: xml
+              dir: '%kernel.project_dir%/config/orm/mapping/PartItem'
+              prefix: 'MarcusSports\Catalog\PartItem\Domain'
+              alias: part_item_domain
+            compatibility_rule_domain:
+              is_bundle: false
+              type: xml
+              dir: '%kernel.project_dir%/config/orm/mapping/CompatibilityRule'
+              prefix: 'MarcusSports\Catalog\CompatibilityRule\Domain'
+              alias: compatibility_rule_domain
 #      other-entity-manager:
 #        connection: other-entity-manager
 #        #naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware

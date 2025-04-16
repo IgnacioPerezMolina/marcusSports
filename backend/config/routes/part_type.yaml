@@ -1,0 +1,4 @@
+part_type_post:
+  path: /part-type
+  controller: MarcusSports\Catalog\PartType\Infrastructure\Controller\PartTypePostController
+  methods: [POST]

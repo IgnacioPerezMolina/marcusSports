@@ -12,11 +12,11 @@ final class UserFirstName extends StringValueObject
 {
     public function __construct(string $value)
     {
-        $this->ensureIsValidFirstName($value);
+        $this->ensureIsValid($value);
         parent::__construct($value);
     }
 
-    private function ensureIsValidFirstName(string $value): void
+    private function ensureIsValid(string $value): void
     {
         if (trim($value) === '') {
             throw new InvalidArgumentException('The first name cannot be empty.');
