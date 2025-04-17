@@ -423,7 +423,9 @@ types and embeddables, enforcing JSON schema rules before persisting.
   *Payment**, **Sales**, **BackOffice**, and any other bounded contexts. Each will require its own domain models,
   application services, and persistence configurations to provide end-to-end functionality.
 
-## Interview Discussion Topics
+## Supporting Topics (if needed)
+
+If there’s an opportunity, I can elaborate on:
 
 - **Health Check**
 - **Keycloak vs Symfony Authorization**
