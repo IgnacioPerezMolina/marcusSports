@@ -4,20 +4,8 @@ declare(strict_types=1);
 
 namespace MarcusSports\Catalog\PartItem\Domain;
 
-use MarcusSports\Shared\Domain\Collection;
-
 final class PartItemCollection
 {
-    // TODO review
-
-
-//    protected ?string $type = PartItem::class;
-//
-//    public function __construct(array $elements = [])
-//    {
-//        parent::__construct($elements, $this->type);
-//    }
-
     private array $partItem;
 
     public function __construct(array $partItem = [])
@@ -30,7 +18,6 @@ final class PartItemCollection
         $this->partItem[] = $partItem;
     }
 
-    /** @return PartItem[] */
     public function all(): array
     {
         return $this->partItem;

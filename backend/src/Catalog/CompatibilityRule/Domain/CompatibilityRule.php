@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace MarcusSports\Catalog\CompatibilityRule\Domain;
 
 use MarcusSports\Catalog\Product\Domain\Product;
+use MarcusSports\Shared\Domain\Aggregate\Aggregate;
 
-class CompatibilityRule
+class CompatibilityRule extends Aggregate
 {
     private CompatibilityRuleUuid $id;
     private Product $productId;

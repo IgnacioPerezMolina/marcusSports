@@ -6,9 +6,9 @@ declare(strict_types=1);
 namespace MarcusSports\Catalog\PartItem\Domain;
 
 use MarcusSports\Catalog\PartType\Domain\PartType;
-use ReflectionObject;
+use MarcusSports\Shared\Domain\Aggregate\Aggregate;
 
-class PartItem
+class PartItem extends Aggregate
 {
     private PartItemUuid $id;
     private PartType $partTypeId;

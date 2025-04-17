@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use MarcusSports\Catalog\Product\Domain\Product;
 use MarcusSports\Shared\Domain\Aggregate\AggregateRoot;
+use MarcusSports\Shared\Domain\Helper\RelationConverter;
 
 class PartType extends AggregateRoot
 {
@@ -90,7 +91,7 @@ class PartType extends AggregateRoot
             'name' => $this->name->value(),
             'productId' => $this->productId->id()->value(),
             'required' => $this->required->value(),
-            'partItems' => $this->partItems->toArray(),
+            'partItems' => RelationConverter::convert($this->partItems),
             'createdAt' => $this->createdAt->value()->format('c'),
             'updatedAt' => $this->updatedAt->value()->format('c'),
             'deletedAt' => $this->deletedAt && $this->deletedAt->value() ? $this->deletedAt->value()->format('c') : null,

@@ -23,6 +23,12 @@ class ProductRepositoryDoctrineMysql extends DoctrineRepository implements Produ
 
     public function findAll(): array
     {
-        return $this->repository(Product::class)->findAll();
+        return $this->repository(Product::class)
+            ->createQueryBuilder('p')
+            ->select('p', 'pt')
+            ->leftJoin('p.partTypes', 'pt')
+            ->where('p.deletedAt.value IS NULL')
+            ->getQuery()
+            ->getResult();
     }
 }

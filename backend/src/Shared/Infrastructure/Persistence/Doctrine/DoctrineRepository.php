@@ -6,7 +6,7 @@ namespace MarcusSports\Shared\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use MarcusSports\Shared\Domain\Aggregate\AggregateRoot;
+use MarcusSports\Shared\Domain\Aggregate\AggregateEntity;
 
 abstract class DoctrineRepository
 {
@@ -20,13 +20,13 @@ abstract class DoctrineRepository
         return $this->entityManager;
     }
 
-    protected function persist(AggregateRoot $entity): void
+    protected function persist(AggregateEntity $entity): void
     {
         $this->entityManager()->persist($entity);
         $this->entityManager()->flush();
     }
 
-    protected function remove(AggregateRoot $entity): void
+    protected function remove(AggregateEntity $entity): void
     {
         $this->entityManager()->remove($entity);
         $this->entityManager()->flush();

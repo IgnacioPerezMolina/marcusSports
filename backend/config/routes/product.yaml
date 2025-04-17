@@ -7,3 +7,8 @@ products_get:
   path: /product
   controller: MarcusSports\Catalog\Product\Infrastructure\Controller\ProductsGetController
   methods: [GET]
+
+products_with_part_types_get:
+  path: /product-part-types
+  controller: MarcusSports\Catalog\Product\Infrastructure\Controller\ProductsWithPartTypesGetController
+  methods: [GET]

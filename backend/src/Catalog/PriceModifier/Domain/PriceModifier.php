@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace MarcusSports\Catalog\PriceModifier\Domain;
 
 use MarcusSports\Catalog\Product\Domain\Product;
+use MarcusSports\Shared\Domain\Aggregate\Aggregate;
 
-class PriceModifier
+class PriceModifier extends Aggregate
 {
     private PriceModifierUuid $id;
     private Product $productId;
@@ -57,7 +58,7 @@ class PriceModifier
     {
         return [
             'id' => $this->id->value(),
-            'productId' => $this->productId->toArray(),
+            'productId' => $this->productId->id()->value(),
             'condition' => $this->condition->toArray(),
             'adjustment' => $this->adjustment->value(),
             'scope' => $this->scope->value()

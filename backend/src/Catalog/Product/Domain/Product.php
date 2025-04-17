@@ -8,6 +8,7 @@ namespace MarcusSports\Catalog\Product\Domain;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use MarcusSports\Shared\Domain\Aggregate\AggregateRoot;
+use MarcusSports\Shared\Domain\Helper\RelationConverter;
 
 class Product extends AggregateRoot
 {
@@ -18,6 +19,7 @@ class Product extends AggregateRoot
     private ProductBasePrice $basePrice;
     private ?Collection $partTypes;
     private ?Collection $rules;
+    private ?Collection $priceModifiers;
     private ProductCreatedAt $createdAt;
     private ProductUpdatedAt $updatedAt;
     private ?ProductDeletedAt $deletedAt;
@@ -30,6 +32,7 @@ class Product extends AggregateRoot
         ProductBasePrice   $basePrice,
         ?Collection        $partTypes,
         ?Collection        $rules,
+        ?Collection        $priceModifiers,
         ProductCreatedAt   $createdAt,
         ProductUpdatedAt   $updatedAt,
         ?ProductDeletedAt  $deletedAt
@@ -42,6 +45,7 @@ class Product extends AggregateRoot
         $this->basePrice = $basePrice;
         $this->partTypes = $partTypes ?? new ArrayCollection();
         $this->rules = $rules ?? new ArrayCollection();
+        $this->priceModifiers = $priceModifiers ?? new ArrayCollection();
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
         $this->deletedAt = $deletedAt;
@@ -82,6 +86,11 @@ class Product extends AggregateRoot
         return $this->rules;
     }
 
+    public function priceModifiers(): ?Collection
+    {
+        return $this->priceModifiers;
+    }
+
     public function createdAt(): ProductCreatedAt
     {
         return $this->createdAt;
@@ -105,6 +114,9 @@ class Product extends AggregateRoot
             'description' => $this->description->value(),
             'category' => $this->category->value(),
             'basePrice' => $this->basePrice->value(),
+            'partTypes' => RelationConverter::convert($this->partTypes),
+            'rules' => RelationConverter::convert($this->rules),
+            'priceModifiers' => RelationConverter::convert($this->priceModifiers),
             'createdAt' => $this->createdAt->value()->format('c'),
             'updatedAt' => $this->updatedAt->value()->format('c'),
             'deletedAt' => $this->deletedAt && $this->deletedAt->value() ? $this->deletedAt->value()->format('c') : null,

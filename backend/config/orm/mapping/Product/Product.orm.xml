@@ -16,13 +16,19 @@
         <embedded name="updatedAt" class="MarcusSports\Catalog\Product\Domain\ProductUpdatedAt" use-column-prefix="false" />
         <embedded name="deletedAt" class="MarcusSports\Catalog\Product\Domain\ProductDeletedAt" use-column-prefix="false" />
 
-        <one-to-many field="partTypes" target-entity="MarcusSports\Catalog\PartType\Domain\PartType" mapped-by="product" orphan-removal="true">
+        <one-to-many field="partTypes" target-entity="MarcusSports\Catalog\PartType\Domain\PartType" mapped-by="productId" orphan-removal="true">
             <cascade>
                 <cascade-all/>
             </cascade>
         </one-to-many>
 
         <one-to-many field="rules" target-entity="MarcusSports\Catalog\CompatibilityRule\Domain\CompatibilityRule" mapped-by="productId" orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many field="priceModifiers" target-entity="MarcusSports\Catalog\PriceModifier\Domain\PriceModifier" mapped-by="productId" orphan-removal="true">
             <cascade>
                 <cascade-all/>
             </cascade>
