@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace MarcusSports\Catalog\PartItem\Domain;
 
 use MarcusSports\Catalog\PartType\Domain\PartType;
+use ReflectionObject;
 
 class PartItem
 {
@@ -104,8 +105,8 @@ class PartItem
             'label' => $this->label->value(),
             'price' => $this->price->value(),
             'status' => $this->status->value(),
-            'attributes' => $this->attributes->toArray(),
-            'restrictions' => $this->restrictions->toArray(),
+            'attributes' => $this->attributes?->toArray(),
+            'restrictions' => $this->restrictions?->toArray(),
             'createdAt' => $this->createdAt->value()->format('c'),
             'updatedAt' => $this->updatedAt->value()->format('c'),
             'deletedAt' => $this->deletedAt && $this->deletedAt->value() ? $this->deletedAt->value()->format('c') : null,

@@ -16,8 +16,8 @@
         <embedded name="label" class="MarcusSports\Catalog\PartItem\Domain\PartItemLabel" use-column-prefix="false" />
         <field name="price" type="part_item_price" column="price" precision="10" scale="2" />
         <field name="status" type="part_item_status" column="status" length="20" />
-        <embedded name="attributes" class="MarcusSports\Catalog\PartItem\Domain\PartItemAttributes" use-column-prefix="false" />
-        <embedded name="restrictions" class="MarcusSports\Catalog\PartItem\Domain\PartItemRestrictions" use-column-prefix="false" />
+        <field name="attributes" type="part_item_attributes" column="attributes" nullable="true"/>
+        <field name="restrictions" type="part_item_restrictions" column="restrictions" nullable="true"/>
         <embedded name="createdAt" class="MarcusSports\Catalog\PartItem\Domain\PartItemCreatedAt" use-column-prefix="false" />
         <embedded name="updatedAt" class="MarcusSports\Catalog\PartItem\Domain\PartItemUpdatedAt" use-column-prefix="false" />
         <embedded name="deletedAt" class="MarcusSports\Catalog\PartItem\Domain\PartItemDeletedAt" use-column-prefix="false" />

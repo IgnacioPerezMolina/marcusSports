@@ -11,16 +11,19 @@ abstract class JsonStringValueObject
 {
     protected array $value;
 
-    public function __construct(string $json)
+    public function __construct(?string $value)
     {
-        try {
-            $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            throw new InvalidArgumentException('Invalid JSON provided: ' . $e->getMessage());
+        if ($value === null) {
+            $this->value = [];
+            return;
         }
 
-        $this->value = $decoded;
-        $this->validate($this->value);
+        $decodedValue = json_decode($value, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \InvalidArgumentException('Invalid JSON string.');
+        }
+        $this->validate($decodedValue);
+        $this->value = $decodedValue;
     }
     abstract protected function validate(array $value): void;
 

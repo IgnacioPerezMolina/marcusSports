@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace MarcusSports\Catalog\CompatibilityRule\Domain;
 
-use MarcusSports\Shared\Domain\Collection;
-
-final class CompatibilityRuleCollection extends Collection
+final class CompatibilityRuleCollection
 {
 
     // TODO review this

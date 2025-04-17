@@ -6,7 +6,7 @@ namespace MarcusSports\Catalog\PartItem\Domain;
 
 use MarcusSports\Shared\Domain\Collection;
 
-final class PartItemCollection extends Collection
+final class PartItemCollection
 {
     // TODO review
 

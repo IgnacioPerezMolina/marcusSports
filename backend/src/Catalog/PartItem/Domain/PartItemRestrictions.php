@@ -11,8 +11,8 @@ final class PartItemRestrictions extends JsonStringValueObject
 {
     protected function validate(array $value): void
     {
-        if (!isset($value['if']) || !isset($value['then'])) {
-            throw new InvalidArgumentException('The restrictions must include "if" and "then" keys.');
-        }
+//        if (!isset($value['if']) || !isset($value['then'])) {
+//            throw new InvalidArgumentException('The restrictions must include "if" and "then" keys.');
+//        }
     }
 }

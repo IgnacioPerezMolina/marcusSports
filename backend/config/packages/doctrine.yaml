@@ -11,6 +11,8 @@ doctrine:
       part_item_uuid: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemUuidType
       part_item_status: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemStatusType
       part_item_price: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemPriceType
+      part_item_restrictions: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemRestrictionsType
+      part_item_attributes: MarcusSports\Catalog\PartItem\Infrastructure\Persistence\Doctrine\PartItemAttributesType
       compatibility_rule_uuid: MarcusSports\Catalog\CompatibilityRule\Infrastructure\Persistence\Doctrine\CompatibilityRuleUuidType
       price_modifier_uuid: MarcusSports\Catalog\PriceModifier\Infrastructure\Persistence\Doctrine\PriceModifierUuidType
       price_modifier_scope: MarcusSports\Catalog\PriceModifier\Infrastructure\Persistence\Doctrine\PriceModifierScopeType

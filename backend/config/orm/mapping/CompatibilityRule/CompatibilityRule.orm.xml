@@ -11,6 +11,6 @@
         <many-to-one field="productId" target-entity="MarcusSports\Catalog\Product\Domain\Product">
             <join-column name="product_id" referenced-column-name="id" on-delete="CASCADE" />
         </many-to-one>
-        <field name="ruleExpression" type="json" column="rule_expression" />
+        <embedded name="ruleExpression" class="MarcusSports\Catalog\CompatibilityRule\Domain\RuleExpression" use-column-prefix="false" />
     </entity>
 </doctrine-mapping>

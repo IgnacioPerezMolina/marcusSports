@@ -11,8 +11,8 @@ final class PartItemAttributes extends JsonStringValueObject
 {
     protected function validate(array $value): void
     {
-        if (empty($value)) {
-            throw new InvalidArgumentException('Part item attributes cannot be empty.');
-        }
+//        if (empty($value)) {
+//            throw new InvalidArgumentException('Part item attributes cannot be empty.');
+//        }
     }
 }
