@@ -247,6 +247,7 @@ export function useProductConfig(category: string) {
         const config = {
             id: Date.now(),
             type,
+            category,
             ...Object.fromEntries(
                 Object.keys(selections.value).map((key) => [key, selections.value[key]])
             ),

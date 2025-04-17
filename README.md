@@ -143,9 +143,22 @@ I use this to improve the manteinemet of the tests. If you want to modify a Mode
 
 
 
+## Special Use Cases
+- Value Object (UUID infrastructure inside Domain and explication)
+- el tema de guardar la información de los pedidos - About, "save unfinished order into a database or what", I discovered a use case to uso that information to send a help
+  email to support the order and finish it. I’m not sure if later I’m going to delete data from database or maybe set an
+  state (Depends on product decisions and metrics that we want to measure)
+- clone of DateTimeValueObject, to keep immutability
+- DECISION - I create a PartType as AggregatedRoot because maybe Marcus wants to sell parts, and it doesn't depend on a
+  Product
 
 
-
+### Entities and Doctrine (ORM) 
+- mappeo de entidades
+- doctrine custom type
+- Explain how we can add different entity Managers using doctrine.yaml, if we need to use different databases, etc
+- orm / dbal (Query builder)/ PDO
+- DSL into validations for json fields
 
 
 ## Resources:
@@ -155,47 +168,22 @@ I use this to improve the manteinemet of the tests. If you want to modify a Mode
 
 ![resume](database-sketch.png)
 
-
-# To explain in the readme:
-+ Layers (Domain, application and Infrastructure)
-+ Explain how I develop the proyect (TDD):
-    - Contract with the costumer
-    - Controllers
-    - Use Case (Application)
-    - Repository
-    - Aggregated, domain value Objects
-    - Infrastructure
-      To avoid contamination (Persistence is an implementation detail)
-
-- Value Object (UUID infrastructure inside Domain and explication)
-+ Repository Patterns
-+ Testing - unitarios, de integración y de aceptación + Mothers
-- el tema de guardar la información de los pedidos - About, "save unfinished order into a database or what", I discovered a use case to uso that information to send a help
-  email to support the order and finish it. I’m not sure if later I’m going to delete data from database or maybe set an
-  state (Depends on product decisions and metrics that we want to measure)
-- Explain how we can add different entity Managers using doctrine.yaml, if we need to use different databases, etc
-- clone of DateTimeValueObject, to keep immutability
-- DSL into validations for json fields
-- mappeo de entidades
-- doctrine custom type
-
-# Cosas de las que podemos hablar con el entrevistador
-- health check. - Ask to interviewer
-- Speak about keycloak as a service instead of Symfony authorization
-- DECISION - I create a PartType as AggregatedRoot because maybe Marcus wants to sell parts, and it doesn't depend on a
-    Product
-- el health-check
-- orm / dbal (Query builder)/ PDO
-- acercamiento de negocio a solución técnica, traer tierra a producto.
-- nm entre product y parttypes (iluminación que sirve para bicis y otro tipo de material deportivo)
-
-
 # Cosas que no he hecho y me hubiera gustado hacer
 - Explain why I dont add more complexity to Roles and how can I make it with permissions, Casbin
 - stock, ya sea añadiendo un campo a casa partitem.
 - eventos de dominio, ya fueran síncronos o en una cola
 - algo de arquitectura de docker
 - carrito de la compra (hacer estimación de tablas y como lo haria)
+
+
+# Cosas de las que podemos hablar con el entrevistador
+- health check. - Ask to interviewer
+- Speak about keycloak as a service instead of Symfony authorization
++ DECISION - I create a PartType as AggregatedRoot because maybe Marcus wants to sell parts, and it doesn't depend on a
+  Product
+- orm / dbal (Query builder)/ PDO
+- acercamiento de negocio a solución técnica, traer tierra a producto.
+- nm entre product y parttypes (iluminación que sirve para bicis y otro tipo de material deportivo)
 
 
 
