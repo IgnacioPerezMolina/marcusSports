@@ -63,6 +63,7 @@ final class DemoFixtures extends Fixture
             new ProductBasePrice(500.00),
             null,
             null,
+            null,
             ProductCreatedAt::create(),
             ProductUpdatedAt::create(),
             null  // Not deleted
@@ -107,6 +108,7 @@ final class DemoFixtures extends Fixture
             new ProductDescription('A high-performance surfboard that can be fully customized to match your style and the wave conditions.'),
             ProductCategory::from('surf'),
             new ProductBasePrice(800.00),
+            null,
             null,
             null,
             ProductCreatedAt::create(),

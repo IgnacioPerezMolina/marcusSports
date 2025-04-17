@@ -36,6 +36,7 @@ final class ProductCreator
             $basePrice,
             null,
             null,
+            null,
             $createdAt,
             $updatedAt,
             $deletedAt
