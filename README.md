@@ -216,7 +216,7 @@ scenarios.
 - **Immutable DateTimeValueObject**  
   The `DateTimeValueObject` in `Shared/Domain/ValueObject/DateTimeValueObject.php` enforces immutability by cloning the
   provided `DateTime` instance in its constructor and returning a fresh clone in its `value()` method. This approach
-  protects the original `DateTime` object from external modifications, ensuring that once a timestamp is set, it cannot
+  protects the original `DateTime` object from external modifications, ensuring that once a timestamp is set, it can’t
   be altered elsewhere in the code. Domain-specific subclasses (e.g. `Users/User/Domain/UserCreatedAt`) inherit this
   immutability guarantee, preserving the integrity of date fields across the application.
 
@@ -423,7 +423,9 @@ types and embeddables, enforcing JSON schema rules before persisting.
   *Payment**, **Sales**, **BackOffice**, and any other bounded contexts. Each will require its own domain models,
   application services, and persistence configurations to provide end-to-end functionality.
 
-## Interview Discussion Topics
+## Supporting Topics (if needed)
+
+If there’s an opportunity, I can elaborate on:
 
 - **Health Check**
 - **Keycloak vs Symfony Authorization**
