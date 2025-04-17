@@ -4,6 +4,8 @@ A customizable e-commerce platform where users can build products like bicycles 
 configuration has dynamic pricing and compatibility rules. Built with Symfony (backend) and Vue (frontend), following
 DDD and Hexagonal Architecture for scalability and maintainability.
 
+![Marcus Sports](marcus-sports.png)
+
 ## Table of Contents
 
 1. [Introduction](#introduction)
