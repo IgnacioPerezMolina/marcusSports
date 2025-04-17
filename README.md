@@ -19,7 +19,7 @@ DDD and Hexagonal Architecture for scalability and maintainability.
 11. [Entities & Doctrine (ORM)](#entities--doctrine-orm)
 12. [Resources](#resources)
 13. [Future Enhancements](#future-enhancements)
-14. [Interview Discussion Topics](#interview-discussion-topics)
+14. [Supporting Topics (if needed)](#supporting-topics-if-needed)
 
 ## Introduction
 
