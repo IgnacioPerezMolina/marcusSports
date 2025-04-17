@@ -93,7 +93,7 @@ class PartType extends AggregateRoot
             'partItems' => $this->partItems->toArray(),
             'createdAt' => $this->createdAt->value()->format('c'),
             'updatedAt' => $this->updatedAt->value()->format('c'),
-            'deletedAt' => $this->deletedAt?->value()->format('c'),
+            'deletedAt' => $this->deletedAt && $this->deletedAt->value() ? $this->deletedAt->value()->format('c') : null,
         ];
     }
 }

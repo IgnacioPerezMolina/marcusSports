@@ -71,12 +71,12 @@ class PartItem
         return $this->status;
     }
 
-    public function attributes(): PartItemAttributes
+    public function attributes(): ?PartItemAttributes
     {
         return $this->attributes;
     }
 
-    public function restrictions(): PartItemRestrictions
+    public function restrictions(): ?PartItemRestrictions
     {
         return $this->restrictions;
     }
@@ -94,5 +94,21 @@ class PartItem
     public function deletedAt(): ?PartItemDeletedAt
     {
         return $this->deletedAt;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id->value(),
+            'partTypeId' => $this->partTypeId->id()->value(),
+            'label' => $this->label->value(),
+            'price' => $this->price->value(),
+            'status' => $this->status->value(),
+            'attributes' => $this->attributes->toArray(),
+            'restrictions' => $this->restrictions->toArray(),
+            'createdAt' => $this->createdAt->value()->format('c'),
+            'updatedAt' => $this->updatedAt->value()->format('c'),
+            'deletedAt' => $this->deletedAt && $this->deletedAt->value() ? $this->deletedAt->value()->format('c') : null,
+        ];
     }
 }

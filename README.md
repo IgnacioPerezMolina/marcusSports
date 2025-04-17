@@ -1,92 +1,198 @@
-# Symfony Base Repository
+# Marcus Sports
 
-This repository contains the basic configuration to run Symfony applications with MySQL database
+A customizable e-commerce platform where users can build products like bicycles by selecting individual parts. Each
+configuration has dynamic pricing and compatibility rules. Built with Symfony (backend) and Vue + PrimeVue (frontend),
+following DDD and Hexagonal Architecture for scalability and maintainability.
 
-## Content
-- PHP-APACHE container running version 8.2
-- MySQL container running version 8.2.0
+## Table of Contents
 
-## Instructions
+1. [Introduction](#introduction)
+2. [Architecture Overview](#architecture-overview)
+    - [Layers](#layers)
+
+## Introduction
+
+I intentionally embraced a degree of overengineering in this project because I wanted to demonstrate my proficiency with
+design patterns, domain‑driven design and a layered architecture that cleanly separates responsibilities. Although I
+could have relied on a simpler, framework‑centric approach to deliver more quickly, I felt it was important to showcase
+abilities that go beyond any specific language or framework.
+
+## Architecture Overview
+
+### Root Directory Structure
+
+At the top level, the project is laid out into three main folders plus the usual solution files:
+
+- **docker/**  
+  Contains the `docker-compose.yml` and related config for building and orchestrating all containers (database, PHP,
+  Node, etc.).
+
+- **backend/**  
+  The Symfony 7.2 application—this is the “star” of the project. It implements DDD and Hexagonal Architecture across the
+  bounded contexts and modules, with clear separation of layers (Application, Domain, Infrastructure).
+
+- **frontend/**  
+  A Vue 3 + PrimeVue single‑page app that consumes the backend APIs. Organised by views and feature modules, with global
+  state (Pinia) and reusable UI components.
+
+---
+
+### Bounded Contexts & Modules
+
+- **BackOffice**
+    - Manage the catalog (create/edit products and their parts)
+    - View orders
+    - Administer stock
+    - Oversee users
+
+- **Catalog**
+    - Core domain for:
+        - Products
+        - Parts
+        - Configurations
+
+- **Payment**
+    - Encapsulates all integrations with external payment gateways
+
+- **Sales**
+    - Handles:
+        - Shopping cart operations
+        - Order processing
+
+- **Users**
+    - Manages everything related to user accounts and profiles
+
+### Shared
+
+- A single **Shared** folder is referenced by every Bounded Context and module
+- Contains common utilities, value objects, helper services and other framework‑agnostic components
+
+## Layered Architecture
+
+Each module in the **backend** follows a three‑layer structure—**Domain**, **Application**, and **Infrastructure**—to enforce separation of concerns and align with Domain‑Driven Design and Hexagonal Architecture.
+
+### Domain Layer
+- The heart of the business model:
+    - **Entities**, **Value Objects**, **Aggregates**
+    - **Domain Services** and **Domain Events**
+    - Encapsulates all core business rules with **no external dependencies**
+
+### Application Layer
+- Orchestrates use cases and workflows:
+    - **Application Services** (command handlers, query handlers)
+    - **Data Transfer Objects (DTOs)** and **Ports/Interfaces**
+    - Coordinates Domain objects to fulfill specific actions
+    - Depends **only** on the Domain Layer
+
+### Infrastructure Layer
+- Provides technical implementations and integrations:
+    - **Repository** implementations (e.g. Doctrine ORM)
+    - External API clients (payment gateways, email/SMS providers)
+    - Messaging/event publishers, file storage, caching, etc.
+    - Symfony service configuration, DI wiring and bootstrapping
+
+#### Directory Structure Example
+
+```
+backend/
+└── src/
+    └── <BoundedContext>/
+        ├── Domain/
+        ├── Application/
+        └── Infrastructure/
+```
+
+## Local Development
+
+Use the included Makefile to manage containers, access the backend, and run tests.
+
 - `make build` to build the containers
 - `make start` to start the containers
 - `make stop` to stop the containers
 - `make restart` to restart the containers
-- `make prepare` to install dependencies with composer (once the project has been created)
+- `make test` to run the full test suite inside the backend container
 - `make logs` to see application logs
 - `make ssh` to SSH into the application container
 
-## Create and Run the application
-> [!TIP]
-> Replace all the occurrences of `symfony-app` in the project with a more meaningful name. 
-> You can use your IDE's find and replace option to complete this task.
-
-
-1. Build and start the containers:
-    ```shell
-    make start
-    ```
-2. SSH into the container:
-    ```shell
-    make ssh
-     ```
-3. Create a Symfony project using the CLI:
-    ```shell
-    symfony new --no-git --dir project
-    ```
-4. Move all the content in the `project` folder to the root of the repository:
-    ```shell
-    mv project/{*,.*} . && rm -r project/
-    ```
-5. Add the content of `.gitignore` file to the root one, it should look like this:
-    ```text
-    .idea
-    .vscode
-    docker-compose.yml
-    
-    ###> symfony/framework-bundle ###
-    /.env.local
-    /.env.local.php
-    /.env.*.local
-    /config/secrets/prod/prod.decrypt.private.php
-    /public/bundles/
-    /var/
-    /vendor/
-    ###< symfony/framework-bundle ###
-    ```
-6. Once you’ve installed you Symfony application go to http://localhost:1000
 
 
 
 
-To speak About:
-- health check. - Ask to interviewer
+
+
+
+
+
+
+
+
+
+
+## Resources:
+
+- Database Sketch: https://drive.google.com/file/d/1kwxwLtPBegcwcSPHlR8rV8D6S4RFW33I/view?usp=sharing
+
+![resume](database-sketch.png)
+
+
+# To explain in the readme:
 - Layers (Domain, application and Infrastructure)
 - Value Object (UUID infrastructure inside Domain and explication)
-- TDD
+- Explain how I develop the proyect (TDD):
+    - Contract with the costumer
+    - Controllers
+    - Use Case (Application)
+    - Repository
+    - Aggregated, domain value Objects
+    - Infrastructure
+      To avoid contamination (Persistence is an implementation detail)
 - Repository Patterns
-
-
-
-- Testing
-- Mothers
-- About, save unfinished order into a database or what, I discovered a use case to uso that information to send a help email to support the order and finish it. I’m not sure if later I’m going to delete data from database or maybe set an state (Depends on product decisions and metrics that we want to measure)
-- Speak about keycloak as a service instead of Symfony authorization
-- **** make that the database created in the make start/build
-
+- Testing - unitarios, de integración y de aceptación + Mothers
+- el tema de guardar la información de los pedidos - About, "save unfinished order into a database or what", I discovered a use case to uso that information to send a help
+  email to support the order and finish it. I’m not sure if later I’m going to delete data from database or maybe set an
+  state (Depends on product decisions and metrics that we want to measure)
 - Explain how we can add different entity Managers using doctrine.yaml, if we need to use different databases, etc
-- Explain how I develop the proyect:
-  - Contract with the costumer
-  - Controllers
-  - Use Case (Application)
-  - Repository
-  - Aggregated, domain value Objects
-  - Infrastructure
-   To avoid contamination (Persistence is an implementation detail)
 - clone of DateTimeValueObject, to keep immutability
-- Explain why I dont add more complexity to Roles and how can I make it with permissions, etc
-
-- DECISION - I create a PartType as AggregatedRoot because maybe Marcus wants to sell parts, and it doesn't depend on a Product
-
-
-- OverEngineering because I want to show 
 - DSL into validations for json fields
+- mappeo de entidades
+- doctrine custom type
+
+# Cosas de las que podemos hablar con el entrevistador
+- health check. - Ask to interviewer
+- Speak about keycloak as a service instead of Symfony authorization
+- DECISION - I create a PartType as AggregatedRoot because maybe Marcus wants to sell parts, and it doesn't depend on a
+    Product
+- el health-check
+- orm / dbal (Query builder)/ PDO
+- acercamiento de negocio a solución técnica, traer tierra a producto.
+- nm entre product y parttypes (iluminación que sirve para bicis y otro tipo de material deportivo)
+
+
+# Cosas que no he hecho y me hubiera gustado hacer
+- Explain why I dont add more complexity to Roles and how can I make it with permissions, Casbin
+- stock, ya sea añadiendo un campo a casa partitem.
+- eventos de dominio, ya fueran síncronos o en una cola
+- algo de arquitectura de docker
+- carrito de la compra (hacer estimación de tablas y como lo haria)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

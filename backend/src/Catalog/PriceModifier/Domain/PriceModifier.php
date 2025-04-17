@@ -52,4 +52,15 @@ class PriceModifier
     {
         return $this->scope;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id->value(),
+            'productId' => $this->productId->toArray(),
+            'condition' => $this->condition->toArray(),
+            'adjustment' => $this->adjustment->value(),
+            'scope' => $this->scope->value()
+        ];
+    }
 }

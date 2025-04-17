@@ -10,4 +10,6 @@ use MarcusSports\Catalog\PartItem\Domain\PartItem;
 interface PartItemRepository
 {
     public function save(PartItem $partItem): void;
+
+    public function findAll(): array;
 }

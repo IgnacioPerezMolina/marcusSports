@@ -40,4 +40,13 @@ class CompatibilityRule
     // public function isSatisfiedBy(ProductConfiguration $configuration): bool {
     //     // $this->ruleExpression.
     // }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id->value(),
+            'productId' => $this->productId->id()->value(),
+            'ruleExpression' => $this->ruleExpression->toArray()
+        ];
+    }
 }

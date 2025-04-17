@@ -80,3 +80,7 @@ services:
 
     MarcusSports\Users\User\Domain\Repository\UserRepository: '@MarcusSports\Users\User\Infrastructure\Persistence\UserRepositoryDoctrineMysql'
     MarcusSports\Catalog\Product\Domain\Repository\ProductRepository: '@MarcusSports\Catalog\Product\Infrastructure\Persistence\ProductRepositoryDoctrineMysql'
+    MarcusSports\Catalog\PartType\Domain\Repository\PartTypeRepository: '@MarcusSports\Catalog\PartType\Infrastructure\Persistence\PartTypeRepositoryDoctrineMysql'
+    MarcusSports\Catalog\PartItem\Domain\Repository\PartItemRepository: '@MarcusSports\Catalog\PartItem\Infrastructure\Persistence\PartItemRepositoryDoctrineMysql'
+    MarcusSports\Catalog\CompatibilityRule\Domain\Repository\CompatibilityRuleRepository: '@MarcusSports\Catalog\CompatibilityRule\Infrastructure\Persistence\CompatibilityRuleRepositoryDoctrineMysql'
+    MarcusSports\Catalog\PriceModifier\Domain\Repository\PriceModifierRepository: '@MarcusSports\Catalog\PriceModifier\Infrastructure\Persistence\PriceModifierRepositoryDoctrineMysql'

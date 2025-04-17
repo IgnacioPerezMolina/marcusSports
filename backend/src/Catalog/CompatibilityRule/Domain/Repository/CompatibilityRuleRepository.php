@@ -9,4 +9,6 @@ use MarcusSports\Catalog\CompatibilityRule\Domain\CompatibilityRule;
 interface CompatibilityRuleRepository
 {
     public function save(CompatibilityRule $compatibilityRule): void;
+
+    public function findAll(): array;
 }

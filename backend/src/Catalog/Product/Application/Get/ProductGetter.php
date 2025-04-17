@@ -10,7 +10,7 @@ use MarcusSports\Catalog\Product\Domain\Repository\ProductRepository;
 
 final class ProductGetter
 {
-    public function __invoke(GetProductsRequest $request, ProductRepository $repository)
+    public function __invoke(GetProductsRequest $request, ProductRepository $repository): array
     {
         $products = $repository->findAll();
         return (new ProductCollection($products))->toArray();

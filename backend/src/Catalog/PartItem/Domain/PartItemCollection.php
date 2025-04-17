@@ -8,10 +8,36 @@ use MarcusSports\Shared\Domain\Collection;
 
 final class PartItemCollection extends Collection
 {
-    protected ?string $type = PartItem::class;
+    // TODO review
 
-    public function __construct(array $elements = [])
+
+//    protected ?string $type = PartItem::class;
+//
+//    public function __construct(array $elements = [])
+//    {
+//        parent::__construct($elements, $this->type);
+//    }
+
+    private array $partItem;
+
+    public function __construct(array $partItem = [])
     {
-        parent::__construct($elements, $this->type);
+        $this->partItem = array_filter($partItem, fn($item) => $item instanceof PartItem);
+    }
+
+    public function add(PartItem $partItem): void
+    {
+        $this->partItem[] = $partItem;
+    }
+
+    /** @return PartItem[] */
+    public function all(): array
+    {
+        return $this->partItem;
+    }
+
+    public function toArray(): array
+    {
+        return array_map(fn(PartItem $partItem) => $partItem->toArray(), $this->partItem);
     }
 }
