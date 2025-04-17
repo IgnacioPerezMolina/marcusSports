@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                        https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="MarcusSports\Catalog\PartType\Domain\PartType" table="part_types">
+        <id name="id" type="part_type_uuid" column="id">
+            <generator strategy="NONE"/>
+        </id>
+        <many-to-one field="productId" target-entity="MarcusSports\Catalog\Product\Domain\Product">
+            <join-column name="product_id" referenced-column-name="id" on-delete="CASCADE" nullable="false"/>
+        </many-to-one>
+        <embedded name="name" class="MarcusSports\Catalog\PartType\Domain\PartTypeName" use-column-prefix="false" />
+        <embedded name="required" class="MarcusSports\Catalog\PartType\Domain\PartTypeRequired" use-column-prefix="false" />
+        <embedded name="createdAt" class="MarcusSports\Catalog\PartType\Domain\PartTypeCreatedAt" use-column-prefix="false" />
+        <embedded name="updatedAt" class="MarcusSports\Catalog\PartType\Domain\PartTypeUpdatedAt" use-column-prefix="false" />
+        <embedded name="deletedAt" class="MarcusSports\Catalog\PartType\Domain\PartTypeDeletedAt" use-column-prefix="false" />
+        <one-to-many field="partItems" target-entity="MarcusSports\Catalog\PartItem\Domain\PartItem" mapped-by="partTypeId">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

@@ -9,7 +9,7 @@ use MarcusSports\Shared\Domain\Collection;
 
 class UserCollection extends Collection
 {
-    private string $type = User::class;
+    public ?string $type = User::class;
 
     public function __construct(array $elements = [])
     {

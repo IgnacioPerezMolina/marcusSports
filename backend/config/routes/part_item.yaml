@@ -1,0 +1,9 @@
+part_item_post:
+  path: /part-item
+  controller: MarcusSports\Catalog\PartItem\Infrastructure\Controller\PartItemPostController
+  methods: [POST]
+
+part_item_get:
+  path: /part-item
+  controller: MarcusSports\Catalog\PartItem\Infrastructure\Controller\PartItemGetController
+  methods: [GET]

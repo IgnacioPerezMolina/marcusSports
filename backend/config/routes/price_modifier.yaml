@@ -1,0 +1,9 @@
+price_modifier_post:
+  path: /price-modifier
+  controller: MarcusSports\Catalog\PriceModifier\Infrastructure\Controller\PriceModifierPostController
+  methods: [POST]
+
+price_modifier_get:
+  path: /price-modifier
+  controller: MarcusSports\Catalog\PriceModifier\Infrastructure\Controller\PriceModifierGetController
+  methods: [GET]

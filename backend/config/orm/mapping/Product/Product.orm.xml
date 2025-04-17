@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping
+        xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                        https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="MarcusSports\Catalog\Product\Domain\Product" table="products">
+        <id name="id" type="product_uuid" column="id">
+            <generator strategy="NONE"/>
+        </id>
+        <embedded name="name" class="MarcusSports\Catalog\Product\Domain\ProductName" use-column-prefix="false" />
+        <embedded name="description" class="MarcusSports\Catalog\Product\Domain\ProductDescription" use-column-prefix="false" />
+        <field name="category" type="product_category" column="category" length="50"/>
+        <field name="basePrice" type="product_base_price" column="base_price" precision="10" scale="2" />
+        <embedded name="createdAt" class="MarcusSports\Catalog\Product\Domain\ProductCreatedAt" use-column-prefix="false" />
+        <embedded name="updatedAt" class="MarcusSports\Catalog\Product\Domain\ProductUpdatedAt" use-column-prefix="false" />
+        <embedded name="deletedAt" class="MarcusSports\Catalog\Product\Domain\ProductDeletedAt" use-column-prefix="false" />
+
+        <one-to-many field="partTypes" target-entity="MarcusSports\Catalog\PartType\Domain\PartType" mapped-by="productId" orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many field="rules" target-entity="MarcusSports\Catalog\CompatibilityRule\Domain\CompatibilityRule" mapped-by="productId" orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many field="priceModifiers" target-entity="MarcusSports\Catalog\PriceModifier\Domain\PriceModifier" mapped-by="productId" orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>
