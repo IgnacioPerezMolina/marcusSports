@@ -131,6 +131,7 @@ Use the included Makefile to manage containers, access the backend, and run test
 ## Resources:
 
 - Database Sketch: https://drive.google.com/file/d/1kwxwLtPBegcwcSPHlR8rV8D6S4RFW33I/view?usp=sharing
+- Postman Example endpoints: 
 
 ![resume](database-sketch.png)
 
