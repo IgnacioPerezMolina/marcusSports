@@ -22,63 +22,20 @@
 
         <!-- Form Container with Scroll -->
         <div v-else class="form-container">
-          <!-- Selector 1: Board Shape -->
-          <div class="selector-group">
-            <label for="board-shape">Board Shape</label>
+          <!-- Dynamic Selectors -->
+          <div v-for="partType in partTypes" :key="partType.name" class="selector-group">
+            <label :for="partType.name.toLowerCase().replace(/\s+/g, '-')">
+              {{ partType.name }} {{ partType.required ? '*' : '' }}
+            </label>
             <Dropdown
-              id="board-shape"
-              v-model="selectedBoardShape"
-              :options="boardShapesOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select a board shape"
-              class="w-full"
-              @change="validateSelections"
-            />
-          </div>
-
-          <!-- Selector 2: Fin Configuration -->
-          <div class="selector-group">
-            <label for="fin-configuration">Fin Configuration</label>
-            <Dropdown
-              id="fin-configuration"
-              v-model="selectedFinConfiguration"
-              :options="finConfigurationsOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select a fin configuration"
-              class="w-full"
-              @change="validateSelections"
-            />
-          </div>
-
-          <!-- Selector 3: Deck Color -->
-          <div class="selector-group">
-            <label for="deck-color">Deck Color</label>
-            <Dropdown
-              id="deck-color"
-              v-model="selectedDeckColor"
-              :options="deckColorsOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select a deck color"
-              class="w-full"
-              @change="validateSelections"
-            />
-          </div>
-
-          <!-- Selector 4: Leash -->
-          <div class="selector-group">
-            <label for="leash">Leash</label>
-            <Dropdown
-              id="leash"
-              v-model="selectedLeash"
-              :options="leashesOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select a leash"
-              class="w-full"
-              @change="validateSelections"
+                :id="partType.name.toLowerCase().replace(/\s+/g, '-')"
+                v-model="selections[partType.name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')]"
+                :options="computedOptions[partType.name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')]"
+                optionLabel="label"
+                optionValue="value"
+                :placeholder="'Select a ' + partType.name.toLowerCase()"
+                class="w-full"
+                @change="validateSelections"
             />
           </div>
         </div>
@@ -94,11 +51,11 @@
             </div>
           </div>
           <Button
-            label="Add to Cart"
-            icon="pi pi-shopping-cart"
-            class="p-button-raised p-button-success add-to-cart-button"
-            :disabled="!isFormComplete || errorMessage || loading"
-            @click="addToCart"
+              label="Add to Cart"
+              icon="pi pi-shopping-cart"
+              class="p-button-raised p-button-success add-to-cart-button"
+              :disabled="!isFormComplete || errorMessage || loading"
+              @click="addToCart(surfboardImage, product?.name || 'Surfboard')"
           />
         </div>
       </div>
@@ -107,202 +64,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
 import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
-import { useCartStore } from '@/stores/cart';
 import surfboardImage from '@/assets/surfboard.jpg';
-import apiClient from '@/api';
+import { useProductConfig } from './composables/useProductConfig';
 
-// Use the cart store
-const cartStore = useCartStore();
-
-// Product and PartTypes data
-const product = ref<any>(null);
-const partTypes = ref<any[]>([]);
-const rules = ref<any[]>([]);
-const priceModifiers = ref<any[]>([]);
-
-// Dropdown options (raw data)
-const boardShapes = ref<any[]>([]);
-const finConfigurations = ref<any[]>([]);
-const deckColors = ref<any[]>([]);
-const leashes = ref<any[]>([]);
-
-// Selected values
-const selectedBoardShape = ref(null);
-const selectedFinConfiguration = ref(null);
-const selectedDeckColor = ref(null);
-const selectedLeash = ref(null);
-
-// Error message and loading state
-const errorMessage = ref<string | null>(null);
-const loading = ref<boolean>(true);
-
-// Fetch product data from API
-const fetchProductData = async () => {
-  try {
-    loading.value = true;
-    const response = await apiClient.get('/product');
-    const products = response.data;
-
-    // Filter the surfboard product
-    const surfProduct = products.find((p: any) => p.id === '22222222-2222-2222-2222-222222222222');
-    if (!surfProduct) {
-      throw new Error('Surfboard product not found');
-    }
-
-    product.value = surfProduct;
-    partTypes.value = surfProduct.partTypes;
-    rules.value = surfProduct.rules;
-    priceModifiers.value = surfProduct.priceModifiers;
-
-    boardShapes.value = partTypes.value
-      .find((pt: any) => pt.name === 'Board Shape')
-      ?.partItems.map((item: any) => ({ label: item.label, value: item.label, price: item.price })) || [];
-    finConfigurations.value = partTypes.value
-      .find((pt: any) => pt.name === 'Fin Configuration')
-      ?.partItems.map((item: any) => ({ label: item.label, value: item.label, price: item.price })) || [];
-    deckColors.value = partTypes.value
-      .find((pt: any) => pt.name === 'Deck Color')
-      ?.partItems.map((item: any) => ({ label: item.label, value: item.label, price: item.price })) || [];
-    leashes.value = partTypes.value
-      .find((pt: any) => pt.name === 'Accessory: Leash')
-      ?.partItems.map((item: any) => ({ label: item.label, value: item.label, price: item.price })) || [];
-  } catch (error) {
-    console.error('Error fetching product data:', error);
-    errorMessage.value = 'Failed to load product data. Please try again later.';
-  } finally {
-    loading.value = false;
-  }
-};
-
-// Validate selections against rules
-const validateSelections = () => {
-  errorMessage.value = null;
-
-  const rule = rules.value.find((rule: any) => rule.ruleExpression.if.fin_configuration === 'Tri-fin');
-  if (rule && selectedFinConfiguration.value === 'Tri-fin' && selectedBoardShape.value !== 'Shortboard') {
-    selectedBoardShape.value = 'Shortboard';
-    errorMessage.value = 'Tri-fin configuration requires a Shortboard shape.';
-  }
-};
-
-// Dropdown options with base prices only
-const boardShapesOptions = computed(() => {
-  const filtered = selectedFinConfiguration.value === 'Tri-fin'
-    ? boardShapes.value.filter(item => item.value === 'Shortboard')
-    : boardShapes.value;
-  return filtered.map(item => ({
-    label: `${item.label} (${item.price.toFixed(2)}€)`,
-    value: item.value,
-    price: item.price,
-  }));
-});
-
-const finConfigurationsOptions = computed(() => {
-  return finConfigurations.value.map(item => ({
-    label: `${item.label} (${item.price.toFixed(2)}€)`,
-    value: item.value,
-    price: item.price,
-  }));
-});
-
-const deckColorsOptions = computed(() => {
-  return deckColors.value.map(item => ({
-    label: `${item.label} (${item.price.toFixed(2)}€)`,
-    value: item.value,
-    price: item.price,
-  }));
-});
-
-const leashesOptions = computed(() => {
-  return leashes.value.map(item => ({
-    label: `${item.label} (${item.price.toFixed(2)}€)`,
-    value: item.value,
-    price: item.price,
-  }));
-});
-
-// Compute applied PriceModifiers for display
-const appliedModifiers = computed(() => {
-  const modifiers: string[] = [];
-  priceModifiers.value.forEach((modifier: any) => {
-    const condition = modifier.condition;
-    if (condition.then.apply_modifier) {
-      const { board_shape, fin_configuration } = condition.if;
-      if (
-        selectedBoardShape.value === board_shape &&
-        selectedFinConfiguration.value === fin_configuration
-      ) {
-        modifiers.push(`+${modifier.adjustment.toFixed(2)}€ for ${board_shape} with ${fin_configuration}`);
-      }
-    }
-  });
-  return modifiers;
-});
-
-// Compute total price with PriceModifiers
-const totalPrice = computed(() => {
-  if (loading.value) return '0.00';
-
-  let price = product.value?.basePrice || 0;
-
-  const boardShapePrice = boardShapes.value.find((item: any) => item.value === selectedBoardShape.value)?.price || 0;
-  const finConfigurationPrice = finConfigurations.value.find((item: any) => item.value === selectedFinConfiguration.value)?.price || 0;
-  const deckColorPrice = deckColors.value.find((item: any) => item.value === selectedDeckColor.value)?.price || 0;
-  const leashPrice = leashes.value.find((item: any) => item.value === selectedLeash.value)?.price || 0;
-
-  price += boardShapePrice + finConfigurationPrice + deckColorPrice + leashPrice;
-
-  // Apply PriceModifiers to the total price
-  priceModifiers.value.forEach((modifier: any) => {
-    const condition = modifier.condition;
-    if (condition.then.apply_modifier) {
-      const { board_shape, fin_configuration } = condition.if;
-      if (
-        selectedBoardShape.value === board_shape &&
-        selectedFinConfiguration.value === fin_configuration
-      ) {
-        price += modifier.adjustment;
-      }
-    }
-  });
-
-  return price.toFixed(2);
-});
-
-// Check if all required fields are complete
-const isFormComplete = computed(() => {
-  return (
-    selectedBoardShape.value !== null &&
-    selectedFinConfiguration.value !== null
-  );
-});
-
-// Add to cart function
-const addToCart = () => {
-  if (!isFormComplete.value || errorMessage.value || loading.value) return;
-
-  const surfboardConfig = {
-    id: Date.now(),
-    type: 'Surfboard',
-    boardShape: selectedBoardShape.value,
-    finConfiguration: selectedFinConfiguration.value,
-    deckColor: selectedDeckColor.value,
-    leash: selectedLeash.value,
-    image: surfboardImage,
-    price: parseFloat(totalPrice.value),
-    quantity: 1,
-  };
-
-  cartStore.addToCart(surfboardConfig);
-};
-
-// Fetch data on component mount
-onMounted(() => {
-  fetchProductData();
-});
+const {
+  product,
+  partTypes,
+  selections,
+  errorMessage,
+  loading,
+  computedOptions,
+  appliedModifiers,
+  totalPrice,
+  isFormComplete,
+  requiredFields,
+  validateSelections,
+  addToCart,
+} = useProductConfig('surf');
 </script>
 
 <style scoped>
@@ -373,6 +153,17 @@ onMounted(() => {
 .selector-group label {
   font-weight: 600;
   font-size: 0.9rem;
+}
+
+.selector-group label::after {
+  content: '*';
+  color: red;
+  margin-left: 0.25rem;
+  display: inline;
+}
+
+.selector-group label:not(:has(+ .p-dropdown[required]))::after {
+  content: none;
 }
 
 .footer-container {

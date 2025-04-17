@@ -22,78 +22,20 @@
 
         <!-- Form Container with Scroll -->
         <div v-else class="form-container">
-          <!-- Selector 1: Frame Type -->
-          <div class="selector-group">
-            <label for="frame-type">Frame Type</label>
+          <!-- Dynamic Selectors -->
+          <div v-for="partType in partTypes" :key="partType.name" class="selector-group">
+            <label :for="partType.name.toLowerCase().replace(/\s+/g, '-')">
+              {{ partType.name }} {{ partType.required ? '*' : '' }}
+            </label>
             <Dropdown
-              id="frame-type"
-              v-model="selectedFrameType"
-              :options="frameTypesOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select a frame type"
-              class="w-full"
-              @change="validateSelections"
-            />
-          </div>
-
-          <!-- Selector 2: Frame Finish -->
-          <div class="selector-group">
-            <label for="frame-finish">Frame Finish</label>
-            <Dropdown
-              id="frame-finish"
-              v-model="selectedFrameFinish"
-              :options="frameFinishesOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select a frame finish"
-              class="w-full"
-              @change="validateSelections"
-            />
-          </div>
-
-          <!-- Selector 3: Wheels -->
-          <div class="selector-group">
-            <label for="wheels">Wheels</label>
-            <Dropdown
-              id="wheels"
-              v-model="selectedWheels"
-              :options="wheelsOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select wheels"
-              class="w-full"
-              @change="validateSelections"
-            />
-          </div>
-
-          <!-- Selector 4: Rim Color -->
-          <div class="selector-group">
-            <label for="rim-color">Rim Color</label>
-            <Dropdown
-              id="rim-color"
-              v-model="selectedRimColor"
-              :options="rimColorsOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select a rim color"
-              class="w-full"
-              @change="validateSelections"
-            />
-          </div>
-
-          <!-- Selector 5: Chain -->
-          <div class="selector-group">
-            <label for="chain">Chain</label>
-            <Dropdown
-              id="chain"
-              v-model="selectedChain"
-              :options="chainsOptions"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select a chain"
-              class="w-full"
-              @change="validateSelections"
+                :id="partType.name.toLowerCase().replace(/\s+/g, '-')"
+                v-model="selections[partType.name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')]"
+                :options="computedOptions[partType.name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '')]"
+                optionLabel="label"
+                optionValue="value"
+                :placeholder="'Select a ' + partType.name.toLowerCase()"
+                class="w-full"
+                @change="validateSelections"
             />
           </div>
         </div>
@@ -109,11 +51,11 @@
             </div>
           </div>
           <Button
-            label="Add to Cart"
-            icon="pi pi-shopping-cart"
-            class="p-button-raised p-button-success add-to-cart-button"
-            :disabled="!isFormComplete || errorMessage || loading"
-            @click="addToCart"
+              label="Add to Cart"
+              icon="pi pi-shopping-cart"
+              class="p-button-raised p-button-success add-to-cart-button"
+              :disabled="!isFormComplete || errorMessage || loading"
+              @click="addToCart(bikeImage, product?.name || 'Bicycle')"
           />
         </div>
       </div>
@@ -122,228 +64,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
 import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
-import { useCartStore } from '@/stores/cart';
 import bikeImage from '@/assets/bike.jpg';
-import apiClient from '@/api';
+import { useProductConfig } from './composables/useProductConfig';
 
-// Use the cart store
-const cartStore = useCartStore();
-
-// Product and PartTypes data
-const product = ref<any>(null);
-const partTypes = ref<any[]>([]);
-const rules = ref<any[]>([]);
-const priceModifiers = ref<any[]>([]);
-
-// Dropdown options (raw data)
-const frameTypes = ref<any[]>([]);
-const frameFinishes = ref<any[]>([]);
-const wheels = ref<any[]>([]);
-const rimColors = ref<any[]>([]);
-const chains = ref<any[]>([]);
-
-// Selected values
-const selectedFrameType = ref(null);
-const selectedFrameFinish = ref(null);
-const selectedWheels = ref(null);
-const selectedRimColor = ref(null);
-const selectedChain = ref(null);
-
-// Error message and loading state
-const errorMessage = ref<string | null>(null);
-const loading = ref<boolean>(true);
-
-// Fetch product data from API
-const fetchProductData = async () => {
-  try {
-    loading.value = true;
-    const response = await apiClient.get('/product');
-    const products = response.data;
-
-    // Filter the bicycle product
-    const bikeProduct = products.find((p: any) => p.id === '11111111-1111-1111-1111-111111111111');
-    if (!bikeProduct) {
-      throw new Error('Bicycle product not found');
-    }
-
-    product.value = bikeProduct;
-    partTypes.value = bikeProduct.partTypes;
-    rules.value = bikeProduct.rules;
-    priceModifiers.value = bikeProduct.priceModifiers;
-
-    frameTypes.value = partTypes.value
-      .find((pt: any) => pt.name === 'Frame Type')
-      ?.partItems.map((item: any) => ({ label: item.label, value: item.label, price: item.price })) || [];
-    frameFinishes.value = partTypes.value
-      .find((pt: any) => pt.name === 'Frame Finish')
-      ?.partItems.map((item: any) => ({ label: item.label, value: item.label, price: item.price })) || [];
-    wheels.value = partTypes.value
-      .find((pt: any) => pt.name === 'Wheels')
-      ?.partItems.map((item: any) => ({ label: item.label, value: item.label, price: item.price })) || [];
-    rimColors.value = partTypes.value
-      .find((pt: any) => pt.name === 'Rim Color')
-      ?.partItems.map((item: any) => ({ label: item.label, value: item.label, price: item.price })) || [];
-    chains.value = partTypes.value
-      .find((pt: any) => pt.name === 'Chain')
-      ?.partItems.map((item: any) => ({ label: item.label, value: item.label, price: item.price })) || [];
-  } catch (error) {
-    console.error('Error fetching product data:', error);
-    errorMessage.value = 'Failed to load product data. Please try again later.';
-  } finally {
-    loading.value = false;
-  }
-};
-
-// Validate selections against rules
-const validateSelections = () => {
-  errorMessage.value = null;
-
-  const rule1 = rules.value.find((rule: any) => rule.ruleExpression.if.wheels === 'Mountain wheels');
-  if (rule1 && selectedWheels.value === 'Mountain wheels' && selectedFrameType.value !== 'Full-suspension') {
-    selectedFrameType.value = 'Full-suspension';
-    errorMessage.value = 'Mountain wheels require a Full-suspension frame type.';
-  }
-
-  const rule2 = rules.value.find((rule: any) => rule.ruleExpression.if.wheels === 'Fat bike wheels');
-  if (rule2 && selectedWheels.value === 'Fat bike wheels' && selectedRimColor.value === 'Red') {
-    selectedRimColor.value = null;
-    errorMessage.value = 'Fat bike wheels cannot be paired with Red rim color.';
-  }
-};
-
-// Dropdown options with base prices only
-const frameTypesOptions = computed(() => {
-  const filtered = selectedWheels.value === 'Mountain wheels'
-    ? frameTypes.value.filter(item => item.value === 'Full-suspension')
-    : frameTypes.value;
-  return filtered.map(item => ({
-    label: `${item.label} (${item.price.toFixed(2)}€)`,
-    value: item.value,
-    price: item.price,
-  }));
-});
-
-const frameFinishesOptions = computed(() => {
-  return frameFinishes.value.map(item => ({
-    label: `${item.label} (${item.price.toFixed(2)}€)`,
-    value: item.value,
-    price: item.price,
-  }));
-});
-
-const wheelsOptions = computed(() => {
-  return wheels.value.map(item => ({
-    label: `${item.label} (${item.price.toFixed(2)}€)`,
-    value: item.value,
-    price: item.price,
-  }));
-});
-
-const rimColorsOptions = computed(() => {
-  const filtered = selectedWheels.value === 'Fat bike wheels'
-    ? rimColors.value.filter(item => item.value !== 'Red')
-    : rimColors.value;
-  return filtered.map(item => ({
-    label: `${item.label} (${item.price.toFixed(2)}€)`,
-    value: item.value,
-    price: item.price,
-  }));
-});
-
-const chainsOptions = computed(() => {
-  return chains.value.map(item => ({
-    label: `${item.label} (${item.price.toFixed(2)}€)`,
-    value: item.value,
-    price: item.price,
-  }));
-});
-
-// Compute applied PriceModifiers for display
-const appliedModifiers = computed(() => {
-  const modifiers: string[] = [];
-  priceModifiers.value.forEach((modifier: any) => {
-    const condition = modifier.condition;
-    if (condition.then.apply_modifier) {
-      const { frame_finish, frame_type } = condition.if;
-      if (
-        selectedFrameFinish.value === frame_finish &&
-        selectedFrameType.value === frame_type
-      ) {
-        modifiers.push(`+${modifier.adjustment.toFixed(2)}€ for ${frame_finish} finish on ${frame_type} frame`);
-      }
-    }
-  });
-  return modifiers;
-});
-
-// Compute total price with PriceModifiers
-const totalPrice = computed(() => {
-  if (loading.value) return '0.00';
-
-  let price = product.value?.basePrice || 0;
-
-  const frameTypePrice = frameTypes.value.find((item: any) => item.value === selectedFrameType.value)?.price || 0;
-  const frameFinishPrice = frameFinishes.value.find((item: any) => item.value === selectedFrameFinish.value)?.price || 0;
-  const wheelsPrice = wheels.value.find((item: any) => item.value === selectedWheels.value)?.price || 0;
-  const rimColorPrice = rimColors.value.find((item: any) => item.value === selectedRimColor.value)?.price || 0;
-  const chainPrice = chains.value.find((item: any) => item.value === selectedChain.value)?.price || 0;
-
-  price += frameTypePrice + frameFinishPrice + wheelsPrice + rimColorPrice + chainPrice;
-
-  // Apply PriceModifiers to the total price
-  priceModifiers.value.forEach((modifier: any) => {
-    const condition = modifier.condition;
-    if (condition.then.apply_modifier) {
-      const { frame_finish, frame_type } = condition.if;
-      if (
-        selectedFrameFinish.value === frame_finish &&
-        selectedFrameType.value === frame_type
-      ) {
-        price += modifier.adjustment;
-      }
-    }
-  });
-
-  return price.toFixed(2);
-});
-
-// Check if all required fields are complete
-const isFormComplete = computed(() => {
-  return (
-    selectedFrameType.value !== null &&
-    selectedFrameFinish.value !== null &&
-    selectedWheels.value !== null &&
-    selectedChain.value !== null
-  );
-});
-
-// Add to cart function
-const addToCart = () => {
-  if (!isFormComplete.value || errorMessage.value || loading.value) return;
-
-  const bikeConfig = {
-    id: Date.now(),
-    type: 'Bicycle',
-    frameType: selectedFrameType.value,
-    frameFinish: selectedFrameFinish.value,
-    wheels: selectedWheels.value,
-    rimColor: selectedRimColor.value,
-    chain: selectedChain.value,
-    image: bikeImage,
-    price: parseFloat(totalPrice.value),
-    quantity: 1,
-  };
-
-  cartStore.addToCart(bikeConfig);
-};
-
-// Fetch data on component mount
-onMounted(() => {
-  fetchProductData();
-});
+const {
+  product,
+  partTypes,
+  selections,
+  errorMessage,
+  loading,
+  computedOptions,
+  appliedModifiers,
+  totalPrice,
+  isFormComplete,
+  requiredFields,
+  validateSelections,
+  addToCart,
+} = useProductConfig('cycling');
 </script>
 
 <style scoped>
@@ -414,6 +153,17 @@ onMounted(() => {
 .selector-group label {
   font-weight: 600;
   font-size: 0.9rem;
+}
+
+.selector-group label::after {
+  content: '*';
+  color: red;
+  margin-left: 0.25rem;
+  display: inline;
+}
+
+.selector-group label:not(:has(+ .p-dropdown[required]))::after {
+  content: none;
 }
 
 .footer-container {

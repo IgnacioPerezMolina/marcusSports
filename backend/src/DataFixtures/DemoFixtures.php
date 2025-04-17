@@ -60,7 +60,7 @@ final class DemoFixtures extends Fixture
             new ProductName('Custom Mountain Bike'),
             new ProductDescription('A fully customizable mountain bike designed for off-road adventures.'),
             ProductCategory::from('cycling'),
-            new ProductBasePrice(500.00),
+            new ProductBasePrice(0.00),
             null,
             null,
             null,

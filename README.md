@@ -114,11 +114,31 @@ Use the included Makefile to manage containers, access the backend, and run test
 - `make logs` to see application logs
 - `make ssh` to SSH into the application container
 
+## How I worked in this repository
+
+In the beginning, I try to implement a type of DDD following this process:
+ 
+- Contract with the costumer
+- Controllers
+- Use Case (Application)
+- Repository
+- Aggregated, domain, value Objects
+- Infrastructure is the last to avoid contamination (Persistence is an implementation detail)
 
 
+## Design Patterns
+- Repository Patterns
 
 
+## Testing
 
+You can find them in the folder /backend/tests
+
+I made only a few tests, but cover acceptance (end to end), integration and unit.
+
+### Mothers
+
+I use this to improve the manteinemet of the tests. If you want to modify a Model and you use a Mother you only need to update in that place.
 
 
 
@@ -137,9 +157,8 @@ Use the included Makefile to manage containers, access the backend, and run test
 
 
 # To explain in the readme:
-- Layers (Domain, application and Infrastructure)
-- Value Object (UUID infrastructure inside Domain and explication)
-- Explain how I develop the proyect (TDD):
++ Layers (Domain, application and Infrastructure)
++ Explain how I develop the proyect (TDD):
     - Contract with the costumer
     - Controllers
     - Use Case (Application)
@@ -147,8 +166,10 @@ Use the included Makefile to manage containers, access the backend, and run test
     - Aggregated, domain value Objects
     - Infrastructure
       To avoid contamination (Persistence is an implementation detail)
-- Repository Patterns
-- Testing - unitarios, de integración y de aceptación + Mothers
+
+- Value Object (UUID infrastructure inside Domain and explication)
++ Repository Patterns
++ Testing - unitarios, de integración y de aceptación + Mothers
 - el tema de guardar la información de los pedidos - About, "save unfinished order into a database or what", I discovered a use case to uso that information to send a help
   email to support the order and finish it. I’m not sure if later I’m going to delete data from database or maybe set an
   state (Depends on product decisions and metrics that we want to measure)

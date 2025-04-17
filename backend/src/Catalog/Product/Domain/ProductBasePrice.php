@@ -25,7 +25,7 @@ final class ProductBasePrice extends FloatValueObject
 
     private function ensureIsValid(float $value): void
     {
-        if ($value <= self::MIN_PRICE) {
+        if ($value < self::MIN_PRICE) {
             throw new InvalidArgumentException('Product base price cannot be negative.');
         }
 
