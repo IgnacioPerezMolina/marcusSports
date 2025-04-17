@@ -37,7 +37,6 @@ class CompatibilityRule extends Aggregate
         return $this->ruleExpression;
     }
 
-    // TODO Ejemplo de comportamiento: evaluar la regla contra una configuración
     // public function isSatisfiedBy(ProductConfiguration $configuration): bool {
     //     // $this->ruleExpression.
     // }

@@ -46,12 +46,6 @@ final class UserRepositoryDoctrineMysqlTest extends WebTestCase
         $this->assertSame($user->lastName()->value(), $savedUser->lastName()->value());
         $this->assertSame($user->email()->value(), $savedUser->email()->value());
         $this->assertSame($user->password()->value(), $savedUser->password()->value());
-        // TODO
-//        print_r($user->createdAt()->value());
-//        print_r($savedUser->createdAt()->value());
-//        $this->assertSame($user->createdAt()->value(), $savedUser->createdAt()->value());
-//        $this->assertSame($user->updatedAt()->value(), $savedUser->updatedAt()->value());
-//        $this->assertSame($user->deletedAt()->value(), $savedUser->deletedAt()->value());
     }
 
     public function test_it_throws_exception_when_duplicate_user_is_saved(): void

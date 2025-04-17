@@ -39,9 +39,6 @@ This implementation currently focuses on the following bounded contexts:
 A high-level summary of how the system is architected to maximize maintainability, testability and separation of
 concerns.
 
-A high-level summary of how the system is architected to maximize maintainability, testability and separation of
-concerns.
-
 ## Project Layout
 
 ```plaintext

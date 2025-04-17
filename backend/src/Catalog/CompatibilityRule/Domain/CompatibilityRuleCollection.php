@@ -6,16 +6,6 @@ namespace MarcusSports\Catalog\CompatibilityRule\Domain;
 
 final class CompatibilityRuleCollection
 {
-
-    // TODO review this
-
-//    protected ?string $type = CompatibilityRule::class;
-//
-//    public function __construct(array $elements = [])
-//    {
-//        parent::__construct($elements, $this->type);
-//    }
-
     private array $compatibilityRules;
 
     public function __construct(array $compatibilityRules = [])
@@ -28,7 +18,6 @@ final class CompatibilityRuleCollection
         $this->compatibilityRules[] = $compatibilityRule;
     }
 
-    /** @return CompatibilityRule[] */
     public function all(): array
     {
         return $this->compatibilityRules;

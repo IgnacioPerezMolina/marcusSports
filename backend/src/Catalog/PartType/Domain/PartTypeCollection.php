@@ -8,15 +8,6 @@ use MarcusSports\Shared\Domain\Collection;
 
 final class PartTypeCollection extends Collection
 {
-    // TODO
-
-//    public ?string $type = PartType::class;
-//
-//    public function __construct(array $elements = [])
-//    {
-//        parent::__construct($elements, $this->type);
-//    }
-
     private array $partType;
 
     public function __construct(array $partType = [])
