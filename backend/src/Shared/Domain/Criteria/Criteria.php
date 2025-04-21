@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace MarcusSports\Shared\Domain\Criteria;
 
-readonly class Criteria
+class Criteria
 {
     public function __construct(
-        private ?Filters $filters = null,
-        private ?Order   $order = null,
-        private ?int     $offset = null,
-        private ?int     $limit = null
+        private readonly ?Filters $filters = null,
+        private readonly ?Order   $order = null,
+        private readonly ?int     $offset = null,
+        private readonly ?int     $limit = null
     ) {
     }
 

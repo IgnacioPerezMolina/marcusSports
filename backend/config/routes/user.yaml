@@ -2,3 +2,8 @@ user_post:
   path: /user
   controller: MarcusSports\Users\User\Infrastructure\Controller\UserPostController
   methods: [POST]
+
+user_list:
+  path: /users
+  controller: MarcusSports\Users\User\Infrastructure\Controller\ListUserGetController
+  methods: [GET]
