@@ -52,7 +52,7 @@ final class DoctrineCriteriaTransformerTest extends MockeryTestCase
             ->with('param_0', 'test@test.com')
             ->andReturnSelf();
 
-        $result = $this->transformer->transform($this->queryBuilder, $criteria, 'u');
+        $result = $this->transformer->transform($criteria, $this->queryBuilder, 'u');
 
         $this->assertSame($this->queryBuilder, $result);
     }
@@ -76,7 +76,7 @@ final class DoctrineCriteriaTransformerTest extends MockeryTestCase
             ->with('param_0', '%Last%')
             ->andReturnSelf();
 
-        $result = $this->transformer->transform($this->queryBuilder, $criteria, 'u');
+        $result = $this->transformer->transform( $criteria, $this->queryBuilder, 'u');
 
         $this->assertSame($this->queryBuilder, $result);
     }
@@ -96,7 +96,7 @@ final class DoctrineCriteriaTransformerTest extends MockeryTestCase
             ->with('u.lastName.value', 'desc')
             ->andReturnSelf();
 
-        $result = $this->transformer->transform($this->queryBuilder, $criteria, 'u');
+        $result = $this->transformer->transform($criteria, $this->queryBuilder, 'u');
 
         $this->assertSame($this->queryBuilder, $result);
     }
@@ -121,7 +121,7 @@ final class DoctrineCriteriaTransformerTest extends MockeryTestCase
             ->with(10) // (2 - 1) * 10
             ->andReturnSelf();
 
-        $result = $this->transformer->transform($this->queryBuilder, $criteria, 'u');
+        $result = $this->transformer->transform($criteria, $this->queryBuilder, 'u');
 
         $this->assertSame($this->queryBuilder, $result);
     }
@@ -137,7 +137,7 @@ final class DoctrineCriteriaTransformerTest extends MockeryTestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Unsupported operator: >');
 
-        $this->transformer->transform($this->queryBuilder, $criteria, 'u');
+        $this->transformer->transform($criteria, $this->queryBuilder, 'u');
     }
 
     private function createCriteriaWithFilter(string $field, string $operator, string $value): Criteria

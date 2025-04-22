@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
-namespace MarcusSports\Tests\Users\User\Application;
+namespace MarcusSports\Tests\Users\Application\SearchByCriteria;
 
 use MarcusSports\Shared\Domain\Criteria\Criteria;
+use MarcusSports\Shared\Domain\Criteria\Filters;
+use MarcusSports\Shared\Domain\Criteria\Order;
 use MarcusSports\Shared\Domain\PaginatedResult;
+use MarcusSports\Shared\Infrastructure\Criteria\SearchParamsCriteriaFiltersParser;
+use MarcusSports\Shared\Infrastructure\Criteria\SearchParamsToCriteriaConverter;
 use MarcusSports\Users\User\Application\SearchByCriteria\UserSearcher;
 use MarcusSports\Users\User\Application\SearchByCriteria\UsersSearchResponse;
 use MarcusSports\Users\User\Domain\Repository\UserRepository;
@@ -16,12 +20,15 @@ final class UserSearcherTest extends MockeryTestCase
 {
     private UserSearcher $searcher;
     private UserRepository $repository;
+    private SearchParamsToCriteriaConverter $criteriaConverter;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->repository = Mockery::mock(UserRepository::class);
-        $this->searcher = new UserSearcher($this->repository);
+        $parser = new SearchParamsCriteriaFiltersParser();
+        $this->criteriaConverter = new SearchParamsToCriteriaConverter($parser);
+        $this->searcher = new UserSearcher($this->repository, $this->criteriaConverter);
     }
 
     public function test_it_searches_users_with_pagination(): void
@@ -31,6 +38,7 @@ final class UserSearcherTest extends MockeryTestCase
             'pageNumber' => '2',
         ];
 
+        $criteria = new Criteria(new Filters([]), Order::none(), 10, 2);
         $users = [Mockery::mock('MarcusSports\Users\User\Domain\User')];
         $total = 50;
 

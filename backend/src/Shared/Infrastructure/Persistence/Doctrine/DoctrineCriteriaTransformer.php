@@ -6,8 +6,9 @@ namespace MarcusSports\Shared\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\ORM\QueryBuilder;
 use MarcusSports\Shared\Domain\Criteria\Criteria;
+use MarcusSports\Shared\Domain\Criteria\CriteriaTransformer;
 
-final class DoctrineCriteriaTransformer
+final class DoctrineCriteriaTransformer implements CriteriaTransformer
 {
     private array $fieldMappings;
 
@@ -16,13 +17,17 @@ final class DoctrineCriteriaTransformer
         $this->fieldMappings = $fieldMappings;
     }
 
-    public function transform(QueryBuilder $queryBuilder, Criteria $criteria, string $alias): QueryBuilder
+    public function transform(Criteria $criteria, mixed $context, string $alias): QueryBuilder
     {
-        $this->applyFilters($queryBuilder, $criteria, $alias);
-        $this->applyOrder($queryBuilder, $criteria, $alias);
-        $this->applyPagination($queryBuilder, $criteria);
+        if (!$context instanceof QueryBuilder) {
+            throw new \InvalidArgumentException('Context must be a QueryBuilder');
+        }
 
-        return $queryBuilder;
+        $this->applyFilters($context, $criteria, $alias);
+        $this->applyOrder($context, $criteria, $alias);
+        $this->applyPagination($context, $criteria);
+
+        return $context;
     }
 
     private function applyFilters(QueryBuilder $queryBuilder, Criteria $criteria, string $alias): void
@@ -55,7 +60,7 @@ final class DoctrineCriteriaTransformer
     {
         if ($criteria->hasOrder()) {
             $orderBy = $criteria->order()->orderBy()->value();
-            $orderType = $criteria->order()->orderType()->value;
+            $orderType = strtolower($criteria->order()->orderType()->value);
 
             $mappedOrderBy = $this->fieldMappings[$orderBy] ?? $orderBy;
             $queryBuilder->orderBy(sprintf('%s.%s', $alias, $mappedOrderBy), $orderType);

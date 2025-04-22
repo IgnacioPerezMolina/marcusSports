@@ -5,14 +5,10 @@ declare(strict_types=1);
 namespace MarcusSports\Users\User\Infrastructure\Persistence;
 
 use MarcusSports\Shared\Domain\Criteria\Criteria;
-use MarcusSports\Shared\Domain\Criteria\FilterOperator;
-use MarcusSports\Shared\Domain\PaginatedResult;
 use MarcusSports\Shared\Infrastructure\Persistence\Doctrine\DoctrineCriteriaTransformer;
 use MarcusSports\Shared\Infrastructure\Persistence\Doctrine\DoctrineRepository;
-use MarcusSports\Shared\Infrastructure\Repository\OperatorMapper;
 use MarcusSports\Users\User\Domain\Repository\UserRepository;
 use MarcusSports\Users\User\Domain\User;
-use MarcusSports\Users\User\Domain\UserCollection;
 use MarcusSports\Users\User\Domain\UserEmail;
 use MarcusSports\Users\User\Domain\UserUuid;
 
@@ -37,22 +33,19 @@ class UserRepositoryDoctrineMysql extends DoctrineRepository implements UserRepo
 
     public function getByCriteria(Criteria $criteria): array
     {
+        $transformer = new DoctrineCriteriaTransformer(self::FIELD_MAPPINGS);
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
+        $queryBuilder = $this->entityManager()->createQueryBuilder()
             ->select('u')
             ->from(User::class, 'u');
 
-        $transformer = new DoctrineCriteriaTransformer(self::FIELD_MAPPINGS);
-        $queryBuilder = $transformer->transform($queryBuilder, $criteria, 'u');
-
+        $queryBuilder = $transformer->transform($criteria, $queryBuilder, 'u');
         $users = $queryBuilder->getQuery()->getResult();
 
-        // Consulta para conteo total
-        $countQueryBuilder = $this->entityManager->createQueryBuilder()
+        $countQueryBuilder = $this->entityManager()->createQueryBuilder()
             ->select('COUNT(u.id)')
             ->from(User::class, 'u');
 
-        // Crear Criteria sin paginación
         $countCriteria = new Criteria(
             $criteria->filters(),
             $criteria->order(),
@@ -60,9 +53,7 @@ class UserRepositoryDoctrineMysql extends DoctrineRepository implements UserRepo
             null
         );
 
-        $countTransformer = new DoctrineCriteriaTransformer(self::FIELD_MAPPINGS);
-        $countQueryBuilder = $countTransformer->transform($countQueryBuilder, $countCriteria, 'u');
-
+        $countQueryBuilder = $transformer->transform($countCriteria, $countQueryBuilder, 'u');
         $total = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
 
         return [
