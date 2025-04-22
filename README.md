@@ -119,9 +119,10 @@ enforce separation of concerns and align with Domain-Driven Design and Hexagonal
 backend/
 └── src/
     └── <BoundedContext>/
-        ├── Domain/
-        ├── Application/
-        └── Infrastructure/
+        ├── <Module>/
+        ├──── Domain/
+        ├──── Application/
+        └──── Infrastructure/
 ```
 
 ## Local Development
