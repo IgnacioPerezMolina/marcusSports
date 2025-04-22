@@ -10,7 +10,7 @@ use MarcusSports\Shared\Domain\Criteria\Filter;
 use MarcusSports\Shared\Domain\Criteria\FilterOperator;
 use MarcusSports\Shared\Domain\Criteria\Filters;
 
-final class UserCriteria extends Criteria
+final readonly class UserCriteria extends Criteria
 {
     public static function forRole(string $role): self
     {

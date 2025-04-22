@@ -7,14 +7,27 @@ namespace MarcusSports\Shared\Domain\Criteria;
 
 final readonly class Order
 {
-    public function __construct(
-        private string    $orderBy,
-        private OrderType $orderType
-    )
+    public function __construct(private OrderBy $orderBy, private OrderType $orderType) {}
+
+    public static function createDesc(OrderBy $orderBy): self
     {
+        return new self($orderBy, OrderType::DESC);
     }
 
-    public function orderBy(): string
+    public static function fromPrimitives(?string $orderBy, ?string $order): self
+    {
+        return ($orderBy === null || $order === null) ? self::none() : new self(
+            new OrderBy($orderBy),
+            OrderType::from($order)
+        );
+    }
+
+    public static function none(): self
+    {
+        return new self(new OrderBy(''), OrderType::NONE);
+    }
+
+    public function orderBy(): OrderBy
     {
         return $this->orderBy;
     }
@@ -24,8 +37,13 @@ final readonly class Order
         return $this->orderType;
     }
 
-    public static function create(string $orderBy, string $orderType): self
+    public function isNone(): bool
     {
-        return new self($orderBy, OrderType::tryFrom($orderType));
+        return $this->orderType()->isNone();
+    }
+
+    public function serialize(): string
+    {
+        return sprintf('%s.%s', $this->orderBy->value(), $this->orderType->value);
     }
 }

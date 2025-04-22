@@ -15,4 +15,9 @@ class UserCollection extends Collection
     {
         parent::__construct($elements, $this->type);
     }
+
+    protected function type(): string
+    {
+        return User::class;
+    }
 }

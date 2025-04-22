@@ -30,4 +30,9 @@ final class PartTypeCollection extends Collection
     {
         return array_map(fn(PartType $partType) => $partType->toArray(), $this->partType);
     }
+
+    protected function type(): string
+    {
+        return PartType::class;
+    }
 }

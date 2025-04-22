@@ -5,5 +5,5 @@ user_post:
 
 user_list:
   path: /users
-  controller: MarcusSports\Users\User\Infrastructure\Controller\ListUserGetController
+  controller: MarcusSports\Users\User\Infrastructure\Controller\UserCriteriaController
   methods: [GET]

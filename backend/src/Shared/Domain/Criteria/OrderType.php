@@ -9,17 +9,10 @@ enum OrderType: string
 {
     case ASC = 'asc';
     case DESC = 'desc';
+    case NONE = 'none';
 
-    public static function getAllowedOperators(): array
+    public function isNone(): bool
     {
-        return array_map(
-            fn(self $operator) => $operator->value,
-            self::cases()
-        );
-    }
-
-    public function value(): string
-    {
-        return $this->value;
+        return $this->value === self::NONE->value;
     }
 }

@@ -4,53 +4,90 @@ declare(strict_types=1);
 
 namespace MarcusSports\Shared\Domain\Criteria;
 
-class Criteria
+readonly class Criteria
 {
+    /** @throws InvalidCriteria */
     public function __construct(
-        private readonly ?Filters $filters = null,
-        private readonly ?Order   $order = null,
-        private readonly ?int     $offset = null,
-        private readonly ?int     $limit = null
+        private Filters $filters,
+        private Order $order,
+        private ?int $pageSize,
+        private ?int $pageNumber
     ) {
+        if ($pageNumber !== null && $pageSize === null) {
+            throw new InvalidCriteria();
+        }
+    }
+
+    /** @throws InvalidCriteria */
+    public static function fromPrimitives(
+        array $filters,
+        ?string $orderBy,
+        ?string $orderType,
+        ?int $pageSize,
+        ?int $pageNumber
+    ): self {
+        return new self(
+            Filters::fromPrimitives($filters),
+            Order::fromPrimitives($orderBy, $orderType),
+            $pageSize,
+            $pageNumber
+        );
+    }
+
+    /** @throws InvalidCriteria */
+    public static function withFilters(array $filters): self
+    {
+        return self::fromPrimitives($filters, null, null, null, null);
     }
 
     public function hasFilters(): bool
     {
-        return null !== $this->filters;
+        return $this->filters->count() > 0;
     }
 
-    public function filters(): ?Filters
+    public function hasOrder(): bool
+    {
+        return !$this->order->isNone();
+    }
+
+    public function plainFilters(): array
+    {
+        return $this->filters->filters();
+    }
+
+    public function filters(): Filters
     {
         return $this->filters;
     }
 
-    public function order(): ?Order
+    public function order(): Order
     {
         return $this->order;
     }
 
-    public function offset(): ?int
+    public function pageSize(): ?int
     {
-        return $this->offset;
+        return $this->pageSize;
     }
 
-    public function limit(): ?int
+    public function pageNumber(): ?int
     {
-        return $this->limit;
+        return $this->pageNumber;
     }
 
-    public static function fromFilters(?array $rawFilters = null, ?Order $order = null, ?int $offset = null, ?int $limit = null): self
+    public function serialize(): string
     {
-        return new self(
-            filters: $rawFilters ? Filters::fromValues($rawFilters) : null,
-            order: $order ?? null,
-            offset: $offset ?? null,
-            limit: $limit ?? null
+        return sprintf(
+            '%s~~%s~~%s~~%s',
+            $this->filters->serialize(),
+            $this->order->serialize(),
+            $this->pageSize ?? 'none',
+            $this->pageNumber ?? 'none'
         );
     }
 
-    public function currentPage(): int
+    public function hasPagination(): bool
     {
-        return $this->offset() ? ($this->offset() / $this->limit()) + 1 : 1;
+        return $this->pageSize !== null && $this->pageNumber !== null;
     }
 }
