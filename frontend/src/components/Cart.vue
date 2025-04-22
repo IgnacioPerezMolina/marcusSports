@@ -66,7 +66,6 @@ const cartStore = useCartStore();
 const cartItems = computed(() => cartStore.cartItems);
 const calculateTotal = computed(() => cartStore.calculateTotal);
 
-// Fetch all products to get option prices
 const products = ref<any[]>([]);
 
 const fetchProducts = async () => {
@@ -98,7 +97,6 @@ const proceedToCheckout = () => {
   emit('proceed-to-checkout');
 };
 
-// Extract specifications (excluding internal fields like id, image, price, quantity, type, category)
 const itemSpecifications = (item: any) => {
   const specs: Record<string, string> = {};
   for (const [key, value] of Object.entries(item)) {
@@ -108,7 +106,6 @@ const itemSpecifications = (item: any) => {
   return specs;
 };
 
-// Format keys for display (e.g., "frame_type" -> "Frame Type")
 const formatKey = (key: string) => {
   return key
       .replace(/_/g, ' ')
@@ -117,7 +114,6 @@ const formatKey = (key: string) => {
       .join(' ');
 };
 
-// Get the price of a specific option
 const getOptionPrice = (key: string, value: string, item: any) => {
   const product = products.value.find(p => p.category === item.category);
   if (!product) return '0.00';

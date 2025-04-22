@@ -2,17 +2,14 @@ import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 
 export const useCartStore = defineStore('cart', () => {
-  // State: cart items
   const cartItems = ref<any[]>([]);
 
-  // Getters
   const cartItemCount = computed(() => cartItems.value.length);
 
   const calculateTotal = computed(() => {
     return cartItems.value.reduce((total: number, item: any) => total + item.price * item.quantity, 0);
   });
 
-  // Actions
   const addToCart = (bikeConfig: any) => {
     cartItems.value.push(bikeConfig);
   };

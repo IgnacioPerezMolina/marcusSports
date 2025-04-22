@@ -41,23 +41,18 @@ interface Product {
 export function useProductConfig(category: string) {
     const cartStore = useCartStore();
 
-    // Product and PartTypes data
     const product = ref<Product | null>(null);
     const partTypes = ref<PartType[]>([]);
     const rulesData = ref<Rule[]>([]);
     const priceModifiers = ref<PriceModifier[]>([]);
 
-    // Dropdown options (raw data)
     const optionsData = ref<Record<string, { label: string; value: string; price: number }[]>>({});
 
-    // Selected values
     const selections = ref<Record<string, string | null>>({});
 
-    // Error message and loading state
     const errorMessage = ref<string | null>(null);
     const loading = ref<boolean>(true);
 
-    // Fetch product data from API based on category
     const fetchProductData = async () => {
         try {
             loading.value = true;
@@ -74,7 +69,6 @@ export function useProductConfig(category: string) {
             rulesData.value = selectedProduct.rules;
             priceModifiers.value = selectedProduct.priceModifiers;
 
-            // Initialize options and selections dynamically
             partTypes.value.forEach((partType) => {
                 const key = partType.name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
                 optionsData.value[key] = partType.partItems.map((item) => ({
@@ -92,7 +86,6 @@ export function useProductConfig(category: string) {
         }
     };
 
-    // Validate selections against rules
     const validateSelections = () => {
         errorMessage.value = null;
 
@@ -106,7 +99,6 @@ export function useProductConfig(category: string) {
             const normalizedIfKey = ifKey.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
             const normalizedThenKey = thenKey.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
 
-            // Handle "if-then" rules
             if (!thenKey.startsWith('not_allowed_')) {
                 if (
                     selections.value[normalizedIfKey] === ifValue &&
@@ -116,7 +108,6 @@ export function useProductConfig(category: string) {
                     errorMessage.value = `${ifValue} requires ${thenKey.replace('_', ' ')} to be ${thenValue}.`;
                 }
             } else {
-                // Handle "not-allowed" rules
                 const notAllowedKey = thenKey.replace('not_allowed_', '');
                 const notAllowedNormalizedKey = notAllowedKey.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
                 if (
@@ -130,14 +121,12 @@ export function useProductConfig(category: string) {
         });
     };
 
-    // Compute dropdown options dynamically
     const computedOptions = computed(() => {
         const result: Record<string, { label: string; value: string; price: number }[]> = {};
 
         Object.keys(optionsData.value).forEach((key) => {
             let filteredOptions = optionsData.value[key] || [];
 
-            // Apply filters based on rules
             rulesData.value.forEach((rule) => {
                 const condition = rule.ruleExpression;
                 const ifKey = Object.keys(condition.if)[0];
@@ -173,7 +162,6 @@ export function useProductConfig(category: string) {
         return result;
     });
 
-    // Compute applied PriceModifiers for display
     const appliedModifiers = computed(() => {
         const modifiers: string[] = [];
         priceModifiers.value.forEach((modifier) => {
@@ -197,7 +185,6 @@ export function useProductConfig(category: string) {
         return modifiers;
     });
 
-    // Compute total price with PriceModifiers
     const totalPrice = computed(() => {
         if (loading.value) return '0.00';
 
@@ -228,19 +215,16 @@ export function useProductConfig(category: string) {
         return price.toFixed(2);
     });
 
-    // Determine required fields using the `required` field from partTypes
     const requiredFields = computed(() => {
         return partTypes.value
             .filter((partType) => partType.required)
             .map((partType) => partType.name.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, ''));
     });
 
-    // Check if all required fields are complete
     const isFormComplete = computed(() => {
         return requiredFields.value.every((key) => selections.value[key] !== null);
     });
 
-    // Add to cart function
     const addToCart = (image: string, type: string) => {
         if (!isFormComplete.value || errorMessage.value || loading.value) return;
 
@@ -259,7 +243,6 @@ export function useProductConfig(category: string) {
         cartStore.addToCart(config);
     };
 
-    // Fetch data on component mount
     onMounted(() => {
         fetchProductData();
     });
