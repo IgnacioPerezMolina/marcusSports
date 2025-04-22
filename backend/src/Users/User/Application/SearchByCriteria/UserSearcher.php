@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MarcusSports\Users\User\Application\SearchByCriteria;
 
 use MarcusSports\Shared\Domain\Criteria\Criteria;
+use MarcusSports\Shared\Domain\Criteria\Filter;
 use MarcusSports\Shared\Domain\Criteria\Order;
 use MarcusSports\Shared\Domain\Criteria\OrderBy;
 use MarcusSports\Shared\Domain\Criteria\OrderType;
@@ -18,7 +19,7 @@ final readonly class UserSearcher
     {
     }
 
-    public function __invoke(array $queryParams): PaginatedResult
+    public function __invoke(array $queryParams): UsersSearchResponse
     {
         try {
             $filters = SearchParamsCriteriaFiltersParser::parse($queryParams);
@@ -28,14 +29,14 @@ final readonly class UserSearcher
 
         $orderBy = $queryParams['orderBy'] ?? null;
         $orderType = $queryParams['order'] ?? null;
-        $pageSize = isset($queryParams['pageSize']) ? (int) $queryParams['pageSize'] : null;
-        $pageNumber = isset($queryParams['pageNumber']) ? (int) $queryParams['pageNumber'] : null;
 
         try {
-            $order = new Order(
-                $orderBy ? new OrderBy($orderBy) : OrderBy::none(),
-                $orderType ? OrderType::from($orderType) : OrderType::none()
-            );
+            $order = ($orderBy || $orderType)
+                ? new Order(
+                    $orderBy ? new OrderBy($orderBy) : new OrderBy('id'),
+                    $orderType ? OrderType::from($orderType) : OrderType::ASC
+                )
+                : Order::none();
         } catch (\ValueError $e) {
             throw new \InvalidArgumentException('Invalid order parameters: ' . $e->getMessage());
         }
@@ -44,8 +45,8 @@ final readonly class UserSearcher
             $criteria = new Criteria(
                 $filters,
                 $order,
-                $pageSize > 0 ? $pageSize : null,
-                $pageNumber > 0 ? $pageNumber : null
+                isset($queryParams['pageSize']) && (int) $queryParams['pageSize'] > 0 ? (int) $queryParams['pageSize'] : null,
+                isset($queryParams['pageNumber']) && (int) $queryParams['pageNumber'] > 0 ? (int) $queryParams['pageNumber'] : null
             );
         } catch (\InvalidArgumentException $e) {
             throw new \InvalidArgumentException('Invalid pagination parameters: ' . $e->getMessage());
@@ -53,11 +54,21 @@ final readonly class UserSearcher
 
         $result = $this->repository->getByCriteria($criteria);
 
-        return new PaginatedResult(
+        $filtersPrimitives = array_map(function (Filter $filter): array {
+            return [
+                'field' => $filter->field()->value(),
+                'operator' => $filter->operator()->value,
+                'value' => $filter->value()->value(),
+            ];
+        }, $filters->filters());
+
+        $paginatedResult = new PaginatedResult(
             $result['items'],
             $result['total'],
             $criteria->pageNumber() ?? 1,
             $criteria->pageSize() ?? 10
         );
+
+        return new UsersSearchResponse($paginatedResult, $filtersPrimitives, $orderBy, $orderType);
     }
 }
