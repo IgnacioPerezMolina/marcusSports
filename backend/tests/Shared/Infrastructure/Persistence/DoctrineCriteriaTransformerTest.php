@@ -128,7 +128,6 @@ final class DoctrineCriteriaTransformerTest extends MockeryTestCase
 
     public function test_it_throws_exception_for_unsupported_operator(): void
     {
-        // Usamos un operador real del enum que el transformer no soporta (GT = '>')
         $criteria = $this->createCriteriaWithFilter(
             'email',
             FilterOperator::GT->value,

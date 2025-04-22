@@ -37,14 +37,38 @@ class UserRepositoryDoctrineMysql extends DoctrineRepository implements UserRepo
 
     public function getByCriteria(Criteria $criteria): array
     {
-        $queryBuilder = $this->entityManager()->createQueryBuilder()
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('u')
             ->from(User::class, 'u');
 
         $transformer = new DoctrineCriteriaTransformer(self::FIELD_MAPPINGS);
         $queryBuilder = $transformer->transform($queryBuilder, $criteria, 'u');
 
-        return $queryBuilder->getQuery()->getResult();
+        $users = $queryBuilder->getQuery()->getResult();
+
+        // Consulta para conteo total
+        $countQueryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('COUNT(u.id)')
+            ->from(User::class, 'u');
+
+        // Crear Criteria sin paginación
+        $countCriteria = new Criteria(
+            $criteria->filters(),
+            $criteria->order(),
+            null,
+            null
+        );
+
+        $countTransformer = new DoctrineCriteriaTransformer(self::FIELD_MAPPINGS);
+        $countQueryBuilder = $countTransformer->transform($countQueryBuilder, $countCriteria, 'u');
+
+        $total = (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
+
+        return [
+            'items' => $users,
+            'total' => $total,
+        ];
     }
 
     public function findByEmail(UserEmail $userEmail): ?User
