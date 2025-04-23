@@ -6,13 +6,13 @@ namespace MarcusSports\Users\User\Application\SearchByCriteria;
 
 use MarcusSports\Shared\Domain\PaginatedResult;
 
-final class UsersSearchResponse
+final readonly class UsersSearchResponse
 {
     public function __construct(
-        private readonly PaginatedResult $paginatedResult,
-        private readonly array           $filters,
-        private readonly ?string         $orderBy,
-        private readonly ?string         $order
+        private PaginatedResult $paginatedResult,
+        private array           $filters,
+        private ?string         $orderBy,
+        private ?string         $order
     )
     {
     }

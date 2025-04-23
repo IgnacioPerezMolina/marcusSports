@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace MarcusSports\Shared\Infrastructure\Criteria;
 
 use MarcusSports\Shared\Domain\Criteria\Criteria;
+use MarcusSports\Shared\Domain\Criteria\InvalidCriteria;
 use MarcusSports\Shared\Domain\Criteria\Order;
 use MarcusSports\Shared\Domain\Criteria\OrderBy;
 use MarcusSports\Shared\Domain\Criteria\OrderType;
@@ -15,6 +16,9 @@ final class SearchParamsToCriteriaConverter
     {
     }
 
+    /**
+     * @throws InvalidCriteria
+     */
     public function convert(array $queryParams): Criteria
     {
         $filters = $this->parser->parse($queryParams);
