@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace MarcusSports\Users\User\Domain;
 
 use MarcusSports\Shared\Domain\Criteria\Criteria;
@@ -15,9 +14,15 @@ final readonly class UserCriteria extends Criteria
     public static function forRole(string $role): self
     {
         return new self(
-            Filters::create([
-                Filter::create('location', FilterOperator::EQUAL->value(), $role)
-            ])
+            new Filters([
+                new Filter(
+                    new FilterField('role'),
+                    FilterOperator::EQUAL,
+                    new FilterValue($role)
+                ),
+            ]),
+            Order::none()
         );
+
     }
 }
