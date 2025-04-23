@@ -12,6 +12,6 @@ class ElasticSearchCriteriaTransformer implements CriteriaTransformer
 {
     public function transform(Criteria $criteria, mixed $context, string $alias): mixed
     {
-        return '';
+        return 'transform';
     }
 }
