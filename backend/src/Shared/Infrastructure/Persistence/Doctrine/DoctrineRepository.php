@@ -6,6 +6,7 @@ namespace MarcusSports\Shared\Infrastructure\Persistence\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use MarcusSports\Shared\Domain\Aggregate\AggregateEntity;
 
 abstract class DoctrineRepository
@@ -35,5 +36,12 @@ abstract class DoctrineRepository
     protected function repository(string $entityClass): EntityRepository
     {
         return $this->entityManager->getRepository($entityClass);
+    }
+
+    protected function createQueryBuilder(string $alias): QueryBuilder
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select($alias)
+            ->from($this->entityClass(), $alias);
     }
 }

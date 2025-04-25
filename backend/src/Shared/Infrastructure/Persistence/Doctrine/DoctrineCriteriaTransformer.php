@@ -11,10 +11,12 @@ use MarcusSports\Shared\Domain\Criteria\CriteriaTransformer;
 final class DoctrineCriteriaTransformer implements CriteriaTransformer
 {
     private array $fieldMappings;
+    private array $hydrators;
 
-    public function __construct(array $fieldMappings = [])
+    public function __construct(array $fieldMappings = [], array $hydrators = [])
     {
         $this->fieldMappings = $fieldMappings;
+        $this->hydrators = $hydrators;
     }
 
     public function transform(Criteria $criteria, mixed $context, string $alias): QueryBuilder
@@ -37,19 +39,17 @@ final class DoctrineCriteriaTransformer implements CriteriaTransformer
             $operator = $filter->operator()->value;
             $value = $filter->value()->value();
             $paramName = "param_{$index}";
-
             $mappedField = $this->fieldMappings[$field] ?? $field;
 
-            switch ($operator) {
-                case '=':
-                    $queryBuilder->andWhere(sprintf('%s.%s = :%s', $alias, $mappedField, $paramName));
-                    break;
-                case 'CONTAINS':
-                    $queryBuilder->andWhere(sprintf('%s.%s LIKE :%s', $alias, $mappedField, $paramName));
-                    $value = "%{$value}%";
-                    break;
-                default:
-                    throw new \InvalidArgumentException("Unsupported operator: {$operator}");
+            if (isset($this->hydrators[$field])) {
+                $value = $this->hydrators[$field]($value);
+            }
+
+            if ($filter->operator()->isContaining()) {
+                $queryBuilder->andWhere(sprintf('%s.%s LIKE :%s', $alias, $mappedField, $paramName));
+                $value = "%{$value}%";
+            } else {
+                $queryBuilder->andWhere(sprintf('%s.%s %s :%s', $alias, $mappedField, $operator, $paramName));
             }
 
             $queryBuilder->setParameter($paramName, $value);

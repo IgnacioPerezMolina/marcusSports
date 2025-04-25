@@ -12,31 +12,20 @@ use MarcusSports\Shared\Domain\Criteria\OrderType;
 
 final class SearchParamsToCriteriaConverter
 {
-    public function __construct(private SearchParamsCriteriaFiltersParser $parser)
-    {
+    public function __construct(
+        private SearchParamsCriteriaFiltersParser $filtersParser
+    ) {
     }
 
-    /**
-     * @throws InvalidCriteria
-     */
-    public function convert(array $queryParams): Criteria
-    {
-        $filters = $this->parser->parse($queryParams);
-        $orderBy = $queryParams['orderBy'] ?? null;
-        $orderType = $queryParams['order'] ?? null;
-
-        $order = ($orderBy || $orderType)
-            ? new Order(
-                $orderBy ? new OrderBy($orderBy) : new OrderBy('id'),
-                $orderType ? OrderType::from($orderType) : OrderType::ASC
-            )
-            : Order::none();
-
-        return new Criteria(
-            $filters,
-            $order,
-            isset($queryParams['pageSize']) && (int) $queryParams['pageSize'] > 0 ? (int) $queryParams['pageSize'] : null,
-            isset($queryParams['pageNumber']) && (int) $queryParams['pageNumber'] > 0 ? (int) $queryParams['pageNumber'] : null
-        );
+    public function convert(
+        array $filters,
+        ?string $orderBy,
+        ?string $order,
+        ?int $pageSize,
+        ?int $pageNumber
+    ): Criteria {
+        $filters = $this->filtersParser->parse(['filters' => $filters]);
+        $order = Order::fromPrimitives($orderBy, $order);
+        return new Criteria($filters, $order, $pageSize, $pageNumber);
     }
 }

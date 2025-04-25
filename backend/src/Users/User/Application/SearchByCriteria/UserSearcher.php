@@ -14,18 +14,11 @@ final readonly class UserSearcher
 {
     public function __construct(
         private UserRepository $repository,
-        private SearchParamsToCriteriaConverter $criteriaConverter
     ) {
     }
 
-    public function __invoke(array $queryParams): UsersSearchResponse
+    public function __invoke(Criteria $criteria): UsersSearchResponse
     {
-        try {
-            $criteria = $this->criteriaConverter->convert($queryParams);
-        } catch (\InvalidArgumentException $e) {
-            throw new \InvalidArgumentException('Invalid search parameters: ' . $e->getMessage());
-        }
-
         $result = $this->repository->getByCriteria($criteria);
 
         $filtersPrimitives = array_map(function (Filter $filter): array {
@@ -46,8 +39,8 @@ final readonly class UserSearcher
         return new UsersSearchResponse(
             $paginatedResult,
             $filtersPrimitives,
-            $queryParams['orderBy'] ?? null,
-            $queryParams['order'] ?? null
+            $criteria->hasOrder() ? $criteria->order()->orderBy()->value() : null,
+            $criteria->hasOrder() ? $criteria->order()->orderType()->value : null
         );
     }
 }
