@@ -50,7 +50,9 @@ WORKDIR /var/www/html
 COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh
 
-CMD composer install --optimize-autoloader ; \
-    wait-for-it.sh app-mysql:3306 --timeout=30 --strict -- \
-    bin/console app:db:init --test; \
-    apache2-foreground
+CMD ["bash", "-lc", "\
+  composer install --optimize-autoloader && \
+  /usr/local/bin/wait-for-it.sh app-mysql:3306 --timeout=30 --strict -- php bin/console app:db:init --test && \
+  php bin/console doctrine:fixtures:load -n && \
+  exec apache2-foreground \
+"]
