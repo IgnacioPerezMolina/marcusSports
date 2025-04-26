@@ -9,7 +9,6 @@ services:
         UID: $U_ID
     volumes:
       - ./backend:/var/www/html
-    # Configuración de XDEBUG y otras variables de entorno
     environment:
       XDEBUG_CLIENT_HOST: 172.17.0.1
       XDEBUG_CLIENT_PORT: 9003
@@ -23,14 +22,15 @@ services:
 
   app-mysql:
     container_name: app-mysql
-    image: mysql:8.2.0
+    image: mysql:9.1
     ports:
       - "3336:3306"
     environment:
-      MYSQL_DATABASE: app
+      MYSQL_DATABASE: marcusSports
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - app-mysql-data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
     networks:
       - app-network
     command: [ "mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci" ]
@@ -44,10 +44,10 @@ services:
     volumes:
       - ./frontend/:/usr/src
     ports:
-      - "80:5173"
+      - "8000:5173"
     depends_on:
       - app-api
-    command: sh -c "yarn install && yarn dev --host"
+    command: sh -c "npm install && npm run dev"
     networks:
       - app-network
 
