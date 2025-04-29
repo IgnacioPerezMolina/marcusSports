@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarcusSports\Tests\Users\Application;
+namespace MarcusSports\Tests\Users\User\Application;
 
 use MarcusSports\Shared\Domain\Criteria\Criteria;
 use MarcusSports\Shared\Domain\Criteria\Filters;

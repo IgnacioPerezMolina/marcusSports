@@ -63,8 +63,9 @@ final class UserRepositoryDoctrineMysql extends DoctrineRepository implements Us
     private function getTotalRows(QueryBuilder $queryBuilder): int
     {
         $countQueryBuilder = clone $queryBuilder;
-        $countQueryBuilder->select('COUNT(u.id)');
+        $countQueryBuilder->select('COUNT(u.id) AS total');
+        $result = $countQueryBuilder->getQuery()->getScalarResult();
 
-        return (int) $countQueryBuilder->getQuery()->getSingleScalarResult();
+        return (int) ($result[0]['total'] ?? 0);
     }
 }
