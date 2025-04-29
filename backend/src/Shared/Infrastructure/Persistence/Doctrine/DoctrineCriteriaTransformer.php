@@ -13,6 +13,13 @@ final class DoctrineCriteriaTransformer implements CriteriaTransformer
     private array $fieldMappings;
     private array $hydrators;
 
+    private const SUPPORTED_OPERATORS = [
+        '=', // EQUAL
+        '!=', // NOT_EQUAL
+        'CONTAINS',
+        'NOT_CONTAINS',
+    ];
+
     public function __construct(array $fieldMappings = [], array $hydrators = [])
     {
         $this->fieldMappings = $fieldMappings;
@@ -40,6 +47,11 @@ final class DoctrineCriteriaTransformer implements CriteriaTransformer
             $value = $filter->value()->value();
             $paramName = "param_{$index}";
             $mappedField = $this->fieldMappings[$field] ?? $field;
+
+            // Validar que el operador sea soportado
+            if (!in_array($operator, self::SUPPORTED_OPERATORS, true)) {
+                throw new \InvalidArgumentException(sprintf('Unsupported operator: %s', $operator));
+            }
 
             if (isset($this->hydrators[$field])) {
                 $value = $this->hydrators[$field]($value);

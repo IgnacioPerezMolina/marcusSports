@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MarcusSports\Tests\Users\Application\SearchByCriteria;
+namespace MarcusSports\Tests\Users\Application;
 
 use MarcusSports\Shared\Domain\Criteria\Criteria;
 use MarcusSports\Shared\Domain\Criteria\Filters;
@@ -33,11 +33,6 @@ final class UserSearcherTest extends MockeryTestCase
 
     public function test_it_searches_users_with_pagination(): void
     {
-        $queryParams = [
-            'pageSize' => '10',
-            'pageNumber' => '2',
-        ];
-
         $criteria = new Criteria(new Filters([]), Order::none(), 10, 2);
         $users = [Mockery::mock('MarcusSports\Users\User\Domain\User')];
         $total = 50;
@@ -48,7 +43,7 @@ final class UserSearcherTest extends MockeryTestCase
             ->with(Mockery::type(Criteria::class))
             ->andReturn(['items' => $users, 'total' => $total]);
 
-        $result = $this->searcher->__invoke($queryParams);
+        $result = $this->searcher->__invoke($criteria);
 
         $this->assertInstanceOf(UsersSearchResponse::class, $result);
         $paginatedResult = $result->paginatedResult();
