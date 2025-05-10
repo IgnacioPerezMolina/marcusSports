@@ -16,5 +16,5 @@ interface UserRepository
     public function save(User $user): void;
     public function find(UserUuid $uuid): ?User;
     public function findByEmail(UserEmail $userEmail): ?User;
-    public function getByCriteria(Criteria $criteria): PaginatedResult;
+    public function getByCriteria(Criteria $criteria): array;
 }

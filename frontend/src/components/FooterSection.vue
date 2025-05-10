@@ -34,5 +34,5 @@
 </template>
 
 <script setup lang="ts">
-// No script required
+
 </script>

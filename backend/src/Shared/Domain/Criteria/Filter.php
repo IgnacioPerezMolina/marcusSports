@@ -2,19 +2,26 @@
 
 declare(strict_types=1);
 
-
 namespace MarcusSports\Shared\Domain\Criteria;
 
 final readonly class Filter
 {
     public function __construct(
-        private string $field,
+        private FilterField $field,
         private FilterOperator $operator,
-        private mixed  $value
-    ) {
+        private FilterValue $value
+    ) {}
+
+    public static function fromPrimitives(array $values): self
+    {
+        return new self(
+            new FilterField($values['field']),
+            FilterOperator::from($values['operator']),
+            new FilterValue($values['value'])
+        );
     }
 
-    public function field(): string
+    public function field(): FilterField
     {
         return $this->field;
     }
@@ -24,35 +31,13 @@ final readonly class Filter
         return $this->operator;
     }
 
-    public function value(): mixed
+    public function value(): FilterValue
     {
         return $this->value;
     }
 
-    public static function create(string $field,
-                                  string $operator,
-                                  mixed  $value): self
+    public function serialize(): string
     {
-        return new self($field, FilterOperator::fromValue($operator), $value);
-    }
-    /*public static function fromPrimitives(string $field, mixed $value): self
-    {
-        return new self(
-            field: $field,
-            operator: FilterOperator::EQUAL,
-            value: $value
-        );
-    }*/
-    public static function fromPrimitives(
-        string $field,
-        string $operator,
-        mixed $value,
-    ): self
-    {
-        return new self(
-            field: $field,
-            operator: FilterOperator::fromValue($operator),
-            value: $value
-        );
+        return sprintf('%s.%s.%s', $this->field->value(), $this->operator->value, $this->value->value());
     }
 }

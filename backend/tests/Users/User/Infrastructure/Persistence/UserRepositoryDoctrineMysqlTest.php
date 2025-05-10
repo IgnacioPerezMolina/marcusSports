@@ -6,6 +6,13 @@ namespace MarcusSports\Tests\Users\User\Infrastructure\Persistence;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use MarcusSports\Shared\Domain\Criteria\Criteria;
+use MarcusSports\Shared\Domain\Criteria\Filter;
+use MarcusSports\Shared\Domain\Criteria\FilterField;
+use MarcusSports\Shared\Domain\Criteria\FilterOperator;
+use MarcusSports\Shared\Domain\Criteria\Filters;
+use MarcusSports\Shared\Domain\Criteria\FilterValue;
+use MarcusSports\Shared\Domain\Criteria\Order;
 use MarcusSports\Tests\Users\User\Domain\Mother\UserCreatedAtMother;
 use MarcusSports\Tests\Users\User\Domain\Mother\UserDeletedAtMother;
 use MarcusSports\Tests\Users\User\Domain\Mother\UserEmailMother;
@@ -70,6 +77,58 @@ final class UserRepositoryDoctrineMysqlTest extends WebTestCase
         $this->expectException(UniqueConstraintViolationException::class);
 
         $this->repository->save($duplicateUser);
+    }
+
+    public function test_it_finds_users_with_pagination(): void
+    {
+        $user1 = UserMother::create(
+            UserUuidMother::create('3816d6ae-f2a9-4624-b0c3-35cfab0ed41d'),
+            UserFirstNameMother::create('Test'),
+            UserLastNameMother::create('Last'),
+            UserEmailMother::create('test@test.com'),
+            UserRoleMother::user(),
+            UserPasswordMother::random(),
+            UserCreatedAtMother::random(),
+            UserUpdatedAtMother::random(),
+            UserDeletedAtMother::create(null)
+        );
+        $user2 = UserMother::create(
+            UserUuidMother::random(),
+            UserFirstNameMother::create('Another'),
+            UserLastNameMother::create('User'),
+            UserEmailMother::create('another@test.com'),
+            UserRoleMother::user(),
+            UserPasswordMother::random(),
+            UserCreatedAtMother::random(),
+            UserUpdatedAtMother::random(),
+            UserDeletedAtMother::create(null)
+        );
+
+        $this->repository->save($user1);
+        $this->repository->save($user2);
+        $this->entityManager->flush();
+
+        $criteria = new Criteria(
+            new Filters([
+                new Filter(
+                    new FilterField('email'),
+                    FilterOperator::from('='),
+                    new FilterValue('test@test.com')
+                ),
+            ]),
+            Order::none(),
+            1,
+            1
+        );
+
+        $result = $this->repository->getByCriteria($criteria);
+
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('items', $result);
+        $this->assertArrayHasKey('total', $result);
+        $this->assertCount(1, $result['items']);
+        $this->assertSame('test@test.com', $result['items'][0]->email()->value());
+        $this->assertSame(1, $result['total']);
     }
 
     protected function tearDown(): void

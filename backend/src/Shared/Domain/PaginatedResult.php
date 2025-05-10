@@ -39,7 +39,7 @@ class PaginatedResult
     public function toArray(): array
     {
         return [
-            'data' => $this->items->toArray(),
+            'data' => $this->items,
             'meta' => $this->meta(),
         ];
     }

@@ -17,7 +17,6 @@ import { definePreset } from '@primevue/themes';
 const app = createApp(App);
 const pinia = createPinia();
 
-// Configura el tema Lara Light
 const MyPreset = definePreset(Lara, {
   semantic: {
     primary: {
@@ -36,7 +35,6 @@ const MyPreset = definePreset(Lara, {
   }
 });
 
-// Configure PrimeVue with the Lara Light Blue theme (styled mode)
 app.use(PrimeVue, {
   theme: {
     preset: MyPreset,
@@ -48,11 +46,9 @@ app.use(PrimeVue, {
   }
 });
 
-// Install router (not heavily used for this single-page landing, but set up for potential navigation)
 app.use(router);
 app.use(pinia);
 
-// Register PrimeVue components globally
 app.component('Menubar', Menubar);
 app.component('Button', Button);
 app.component('Card', Card);
@@ -60,5 +56,4 @@ app.component('InputText', InputText);
 app.component('Textarea', Textarea);
 app.component('Avatar', Avatar);
 
-// Mount the app
 app.mount('#app');

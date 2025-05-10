@@ -4,19 +4,33 @@ declare(strict_types=1);
 
 namespace MarcusSports\Users\User\Infrastructure\Persistence;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use MarcusSports\Shared\Domain\Criteria\Criteria;
-use MarcusSports\Shared\Domain\Criteria\FilterOperator;
-use MarcusSports\Shared\Domain\PaginatedResult;
+use MarcusSports\Shared\Infrastructure\Persistence\Doctrine\DoctrineCriteriaTransformer;
 use MarcusSports\Shared\Infrastructure\Persistence\Doctrine\DoctrineRepository;
-use MarcusSports\Shared\Infrastructure\Repository\OperatorMapper;
 use MarcusSports\Users\User\Domain\Repository\UserRepository;
 use MarcusSports\Users\User\Domain\User;
-use MarcusSports\Users\User\Domain\UserCollection;
 use MarcusSports\Users\User\Domain\UserEmail;
 use MarcusSports\Users\User\Domain\UserUuid;
 
-class UserRepositoryDoctrineMysql extends DoctrineRepository implements UserRepository
+final class UserRepositoryDoctrineMysql extends DoctrineRepository implements UserRepository
 {
+    private const FIELD_MAPPINGS = [
+        'email' => 'email.value',
+        'firstName' => 'firstName.value',
+        'lastName' => 'lastName.value',
+        'role' => 'role',
+    ];
+
+    private DoctrineCriteriaTransformer $transformer;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        parent::__construct($entityManager);
+        $this->transformer = new DoctrineCriteriaTransformer(self::FIELD_MAPPINGS);
+    }
+
     public function save(User $user): void
     {
         $this->persist($user);
@@ -27,70 +41,31 @@ class UserRepositoryDoctrineMysql extends DoctrineRepository implements UserRepo
         return $this->repository(User::class)->find($uuid);
     }
 
-    public function getByCriteria(Criteria $criteria): PaginatedResult
+    public function getByCriteria(Criteria $criteria): array
     {
-        $query = $this->entityManager()->createQueryBuilder()
-            ->select('u')
-            ->from(User::class, 'u');
-
-        if ($criteria->hasFilters()) {
-            foreach ($criteria->filters()->filters() as $key => $filter) {
-                $fieldName = $filter->field();
-                $field = match ($fieldName) {
-                    'email.value' => 'LOWER(u.email.value)',
-                    'first_name.value' => 'LOWER(u.first_name.value)',
-                    default => 'u.' . $fieldName
-                };
-
-                $paramName = 'param_' . $key;
-
-                if ($filter->operator()->value() === FilterOperator::CONTAINS->value) {
-                    $paramValue = '%' . strtolower($filter->value()) . '%';
-                } else {
-                    $paramValue = $filter->value();
-                }
-
-                $query->andWhere(
-                    sprintf('%s %s :%s',
-                        $field,
-                        OperatorMapper::mapOperator($filter->operator()->value()),
-                        $paramName
-                    )
-                )->setParameter($paramName, $paramValue);
-            }
-        }
-
-        $countQuery = clone $query;
-        $total = $countQuery->select('COUNT(u.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        if ($order = $criteria->order()) {
-            $query->orderBy(
-                'u.' . $order->orderBy(),
-                $order->orderType()->value
-            );
-        }
-
-        if ($criteria->offset()) {
-            $query->setFirstResult($criteria->offset());
-        }
-
-        if ($criteria->limit()) {
-            $query->setMaxResults($criteria->limit());
-        }
-
-        return
-            new PaginatedResult(
-                items: new UserCollection($query->getQuery()->getResult()),
-                total: $total,
-                currentPage: $criteria->currentPage(),
-                itemsPerPage: $criteria->limit()
-            );
+        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder = $this->transformer->transform($criteria, $queryBuilder, 'u');
+        $result = $queryBuilder->getQuery()->getResult();
+        $total = $this->getTotalRows($queryBuilder);
+        return ['items' => $result, 'total' => $total];
     }
 
     public function findByEmail(UserEmail $userEmail): ?User
     {
         return $this->repository(User::class)->findOneBy(['email.value' => $userEmail->value()]);
+    }
+
+    protected function entityClass(): string
+    {
+        return User::class;
+    }
+
+    private function getTotalRows(QueryBuilder $queryBuilder): int
+    {
+        $countQueryBuilder = clone $queryBuilder;
+        $countQueryBuilder->select('COUNT(u.id) AS total');
+        $result = $countQueryBuilder->getQuery()->getScalarResult();
+
+        return (int) ($result[0]['total'] ?? 0);
     }
 }

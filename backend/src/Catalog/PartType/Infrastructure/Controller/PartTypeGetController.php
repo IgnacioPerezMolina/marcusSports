@@ -24,7 +24,6 @@ class PartTypeGetController
     {
         $partTypes = $this->partTypeGetter->__invoke(new GetPartTypeRequest($request), $this->repository);
 
-//        dd($partTypes);
         return new Response(
             json_encode($partTypes),
             Response::HTTP_OK,

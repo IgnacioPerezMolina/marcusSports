@@ -5,52 +5,41 @@ declare(strict_types=1);
 
 namespace MarcusSports\Shared\Domain\Criteria;
 
-class Filters
-{
-    private array $filters;
+use MarcusSports\Shared\Domain\Collection;
 
-    public function __construct(Filter ...$filters)
+final class Filters extends Collection
+{
+    public static function fromPrimitives(array $values): self
     {
-        $this->filters = $filters;
+        return new self(array_map(self::filterBuilder(), $values));
+    }
+
+    private static function filterBuilder(): callable
+    {
+        return fn (array $values): Filter => Filter::fromPrimitives($values);
+    }
+
+    public function add(Filter $filter): self
+    {
+        return new self(array_merge($this->items(), [$filter]));
     }
 
     public function filters(): array
     {
-        return $this->filters;
+        return $this->items();
     }
 
-    private function add(Filter $filter): self
+    public function serialize(): string
     {
-        $this->filters[] = $filter;
-        return $this;
+        return reduce(
+            static fn (string $accumulate, Filter $filter): string => sprintf('%s^%s', $accumulate, $filter->serialize()),
+            $this->items(),
+            ''
+        );
     }
 
-    public static function create(array $filters): self
+    protected function type(): string
     {
-        foreach ($filters as $filter) {
-            if (!$filter instanceof Filter) {
-                throw new \InvalidArgumentException('All filters must be instances of Filter class');
-            }
-        }
-        return new self(...$filters);
-    }
-
-    /**
-     * @param array<string, mixed> $values
-     */
-    public static function fromValues(array $values): self
-    {
-        $filters = [];
-        foreach ($values as $field => $value) {
-            if (null !== $value) {
-                if ($value instanceof Filter) {
-                    $filters[] = $value;
-                    continue;
-                }
-                $filters[] = Filter::fromPrimitives($field, '=', $value);
-            }
-        }
-
-        return new self(... $filters);
+        return Filter::class;
     }
 }

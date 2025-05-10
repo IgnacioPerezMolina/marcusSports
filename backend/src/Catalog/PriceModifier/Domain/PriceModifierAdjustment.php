@@ -11,7 +11,6 @@ final class PriceModifierAdjustment extends FloatValueObject
 {
     public function __construct(float $value)
     {
-        // You might allow negative (for discounts)
         if (!is_numeric($value)) {
             throw new InvalidArgumentException('The price modifier adjustment must be numeric.');
         }
